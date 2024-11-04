@@ -1,0 +1,120 @@
+@use '../base';
+
+.landing-page {
+  background: base.$background-color;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  font-family: "Inter-Bold", sans-serif;
+  color: base.$text-color;
+}
+
+.background-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  @extend %flex-center;
+  align-items: flex-end;
+}
+
+.background-logo {
+  opacity: 0.15;
+  width: 90%;
+  height: 80%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  justify-content: center;
+  height: 80vh;
+  position: relative;
+}
+
+.headline-container {
+  padding: 0 68px;
+  height: 100px;
+  position: relative;
+}
+
+.headline-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  left: 68px;
+  top: 0;
+}
+
+.primary-title {
+  @extend %text-style;
+  text-align: center;
+  letter-spacing: -0.05em;
+  font-size: 49px;
+  line-height: 120%;
+}
+
+.secondary-title {
+  color: base.$text-color;
+  text-align: center;
+  font-size: 21px;
+  line-height: 120%;
+  font-weight: 400;
+  @extend %flex-center;
+}
+
+.cta-container {
+  background: base.$blue;
+  @extend %rounded-module;
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  height: 70px;
+  width: fit-content;
+  margin-left: 68px;
+}
+
+.cta-button {
+  color: base.$text-color;
+  font-size: 25px;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  @extend %flex-center;
+}
+
+.cta-arrow {
+  width: 25px;
+  height: 25px;
+  @extend %flex-center;
+}
+
+.example-section {
+  background: linear-gradient(
+    90deg,
+    rgba(base.$blue, 1) 0%,
+    rgba(base.$blue, 1) 16%,
+    rgba(22, 22, 22, 1) 100%
+  );
+  margin-top: 20px;
+  border-radius: base.$outer-border;
+  width: 100%;
+  height: 95vh;
+  @extend %flex-center;
+  position: relative;
+}
+
+.example-text {
+  color: #ffffff;
+  font-size: 29px;
+  font-weight: 700;
+  @extend %flex-center;
+}

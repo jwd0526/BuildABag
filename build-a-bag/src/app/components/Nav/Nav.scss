@@ -1,0 +1,60 @@
+@use '../../base';
+
+.header {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navigation-pill-list {
+  @extend %rounded-module;
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px 10px 10px;
+}
+
+.title {
+  @extend %rounded-title;
+  display: flex;
+  height: 50px;
+  padding: 10px 15px 10px 10px;
+}
+
+.logo-box {
+  height: 30px;
+  width: 30px;
+  @extend %flex-center;
+}
+
+.build-a-bag {
+  @extend %flex-center;
+  @extend %text-style;
+  font-size: 18px;
+}
+
+.navigation-pill {
+  @extend %flex-center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.nav-header {
+  @extend %text-style;
+  font-size: 15px;
+}
+
+.header-auth {
+  @extend %rounded-module;
+  @extend %flex-center;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  height: 70px;
+  padding: 10px 10px 10px 20px;
+}
+
+.profile-button {
+  @extend %rounded-title;
+  @extend %circle-dimensions;
+}
