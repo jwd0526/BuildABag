@@ -1,6 +1,6 @@
 import React from 'react';
 import LandingPage from './LandingPage';
-import '../globals.scss'
+import '../globals.css'
 
 const Home: React.FC = () => {
   return (
