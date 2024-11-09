@@ -21,8 +21,9 @@ $outer-border: 35px;
   border-radius: $inner-border;
 }
 
-%circle-dimensions {
-  width: 50px;
+%pill-dimensions {
+  padding: 0 15px;
+  width: auto;
   height: 50px;
   @extend %flex-center;
 }

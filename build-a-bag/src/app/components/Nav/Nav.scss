@@ -35,8 +35,6 @@
 
 .navigation-pill {
   @extend %flex-center;
-  position: relative;
-  flex-shrink: 0;
 }
 
 .nav-header {
@@ -47,7 +45,6 @@
 .header-auth {
   @extend %rounded-module;
   @extend %flex-center;
-  display: flex;
   flex-direction: row;
   gap: 10px;
   height: 70px;
@@ -56,5 +53,10 @@
 
 .profile-button {
   @extend %rounded-title;
-  @extend %circle-dimensions;
+  @extend %pill-dimensions;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }

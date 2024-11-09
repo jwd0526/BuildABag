@@ -10,10 +10,12 @@ interface LandingPageProps extends React.HTMLAttributes<HTMLDivElement> {
 const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) => {
   return (
     <div className={`landing-page ${className}`} {...props}>
+      <Nav loggedIn={true} />
+      
       <div className="background-overlay">
         <img className="background-logo" src="logo.svg" alt="Background Logo" />
       </div>
-      <Nav />
+      
       <div className="content">
         <div className="headline-container">
           <div className="headline-text">
