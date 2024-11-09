@@ -1,0 +1,79 @@
+.header {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navigation-pill-list {
+  background: #dadada;
+  border-radius: 35px;
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px 10px 10px;
+}
+
+.title {
+  background: #bec8e1;
+  border-radius: 25px;
+  display: flex;
+  height: 50px;
+  padding: 10px 15px 10px 10px;
+}
+
+.logo-box {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.build-a-bag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.navigation-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-header {
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.header-auth {
+  background: #dadada;
+  border-radius: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  height: 70px;
+  padding: 10px 10px 10px 20px;
+}
+
+.profile-button {
+  background: #bec8e1;
+  border-radius: 25px;
+  padding: 0 15px;
+  width: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}

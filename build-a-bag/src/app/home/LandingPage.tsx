@@ -1,7 +1,7 @@
 import Nav from "../components/Nav/Nav";
 import '../../../public/logo.svg';
 import '../../../public/arrow.svg';
-import "./LandingPage.scss";
+import "./LandingPage.css";
 
 interface LandingPageProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;

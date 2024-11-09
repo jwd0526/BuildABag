@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import './Nav.scss';
+import './Nav.css';
 import '../../../../public/logo.svg';
 
 interface NavHeaderProps {
