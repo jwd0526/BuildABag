@@ -1,79 +1,62 @@
 .header {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 10px 20px;
+  position: relative;
+  z-index: 2; /* Ensure it is above other elements */
 }
 
 .navigation-pill-list {
-  background: #dadada;
-  border-radius: 35px;
   display: flex;
+  align-items: center;
   gap: 20px;
-  padding: 10px 20px 10px 10px;
 }
 
 .title {
-  background: #bec8e1;
-  border-radius: 25px;
-  display: flex;
-  height: 50px;
-  padding: 10px 15px 10px 10px;
-}
-
-.logo-box {
-  height: 30px;
-  width: 30px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  background: #bec8e1;
+  border-radius: 25px;
+  padding: 10px;
+}
+
+.logo-box img {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
 }
 
 .build-a-bag {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #2c2c2c;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 18px;
-}
-
-.navigation-pill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-header {
-  color: #2c2c2c;
-  font-weight: 700;
-  font-size: 15px;
+  margin-left: 10px;
 }
 
 .header-auth {
-  background: #dadada;
-  border-radius: 35px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: row;
   gap: 10px;
-  height: 70px;
-  padding: 10px 10px 10px 20px;
+  z-index: 3; /* Ensure it is above background elements */
 }
 
 .profile-button {
   background: #bec8e1;
-  border-radius: 25px;
-  padding: 0 15px;
-  width: auto;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #2c2c2c;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.clickable:hover {
-  cursor: pointer;
-  opacity: 0.8;
+.profile-button:hover {
+  background-color: #a7b8d7;
+}
+
+.clickable {
+  user-select: none;
 }

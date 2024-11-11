@@ -128,3 +128,27 @@
   align-items: center;
   justify-content: center;
 }
+
+.item-image {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+
+.add-item-form button {
+  background-color: #bec8e1;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-item-form button:hover {
+  background-color: #a7b8d7;
+}
