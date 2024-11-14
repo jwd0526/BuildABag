@@ -1,57 +1,84 @@
 "use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import "./Nav.css";
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import './Nav.css';
 
-interface NavProps {
-  loggedIn: boolean;
-  setLoggedIn: (value: boolean) => void;
+interface NavHeaderProps {
+  label: string;
+  isButton: boolean;
+  onClick?: () => void;
 }
 
-const Nav: React.FC<NavProps> = ({ loggedIn }) => {
-  const router = useRouter();
+const NavHeader: React.FC<NavHeaderProps> = ({ label, isButton, onClick }) => (
+  <div className="navigation-pill clickable" style={{zIndex: 2}}>
+    <div className="nav-header" onClick={isButton && onClick ? onClick : undefined}>
+      {label}
+    </div>
+  </div>
+);
 
+const Nav: React.FC = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const handleClubsClick = () => {
+    console.log("Clubs clicked");
+  };
+
+  const handleResourcesClick = () => {
+    console.log("Resources clicked");
+  };
+
+  const handleContactClick = () => {
+    console.log("Contact clicked");
+  };
+
+  const handleAuthClick = () => {
+    if (session) {
+      router.push("/home");
+    } else {
+      router.push("/login");
+    }
+  };
+
+  const handleProfileClick = () => {
+    if (session) {
+      router.push("/user-profile");
+    } else {
+      router.push("/signup");
+    }
+  };
+
+  // Always render the Nav, regardless of auth state
   return (
     <div className="header">
-      {/* Navigation Links */}
       <div className="navigation-pill-list">
         <div className="title">
           <div className="logo-box">
-            <img src="/logo.svg" alt="Logo" onClick={() => router.push("/home")} />
+            <img className="logo" src="/logo.svg" alt="Logo" />
           </div>
           <div className="build-a-bag">BuildABag</div>
         </div>
+        <NavHeader label="Clubs" isButton={true} onClick={handleClubsClick} />
+        <NavHeader label="Resources" isButton={true} onClick={handleResourcesClick} />
+        <NavHeader label="Contact" isButton={true} onClick={handleContactClick} />
       </div>
-
-      {/* Authentication Links */}
       <div className="header-auth">
-        {!loggedIn ? (
-          <>
-            <div
-              className="profile-button clickable"
-              onClick={() => router.push("/login")}
-              role="button"
-            >
-              Log In
-            </div>
-            <div
-              className="profile-button clickable"
-              onClick={() => router.push("/signup")}
-              role="button"
-            >
-              Sign Up
-            </div>
-          </>
-        ) : (
-          <div
-            className="profile-button clickable"
-            onClick={() => router.push("/user-profile")}
-            role="button"
-          >
-            Profile
-          </div>
-        )}
+        {/* Auth button changes based on session state */}
+        <NavHeader 
+          label={session ? "Home" : "Log In"} 
+          isButton={true} 
+          onClick={handleAuthClick} 
+        />
+        <div className="profile-button">
+          {/* Profile button changes based on session state */}
+          <NavHeader 
+            label={session ? (session.user?.name?.[0] || 'U') : "Sign Up"} 
+            isButton={true} 
+            onClick={handleProfileClick} 
+          />
+        </div>
       </div>
     </div>
   );

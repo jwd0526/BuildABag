@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import styles from "./ProfilePage.module.css";
 import Nav from "../components/Nav/Nav";
 import ProfileInfo from "./ProfileInfo";
@@ -9,22 +10,31 @@ import AccountNavigation from "./AccountNav";
 import AccountInfo from "./AccountInfo";
 import SavedBagsSection from "./SavedBagsSection";
 
-interface ProfilePageProps {}
-
-const ProfilePage: React.FC<ProfilePageProps> = () => {
-  const [email, setEmail] = useState("jdoe@mail.com");
+const ProfilePage: React.FC = () => {
+  const { data: session, status } = useSession();
+  const [email, setEmail] = useState(session?.user?.email || "");
   const [phone, setPhone] = useState("+1 (123) 456-7890");
   const [isLoading, setIsLoading] = useState(false);
   const [currentSection, setCurrentSection] = useState("account");
   const router = useRouter();
 
-  // Logout function
-  const handleLogout = () => {
-    // Clear localStorage or session storage if used
-    localStorage.removeItem("currentUser");
+  // Protect the route
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
-    // Redirect to the home page
-    router.push("/home");
+  if (!session) {
+    router.push("/login");
+    return null;
+  }
+
+  // Logout function
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: true, callbackUrl: '/' });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const updateEmail = async (newEmail: string) => {
@@ -51,6 +61,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
     setIsLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Add actual password update logic here
     } finally {
       setIsLoading(false);
     }
@@ -58,9 +69,13 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
 
   return (
     <main className={styles.desktop}>
-      <Nav loggedIn={true} setLoggedIn={handleLogout} />
+      <Nav />
       <section className={styles.profileSection}>
-        <ProfileInfo />
+        <ProfileInfo 
+          name={session.user?.name || "User"}
+          email={session.user?.email || ""}
+          image={session.user?.image}
+        />
         <AccountNavigation
           activeSection={currentSection}
           onNavigate={(section) => setCurrentSection(section)}
@@ -74,7 +89,7 @@ const ProfilePage: React.FC<ProfilePageProps> = () => {
               updatePhone={updatePhone}
               updatePassword={updatePassword}
               isLoading={isLoading}
-              onLogout={handleLogout} // Pass the logout function to AccountInfo
+              onLogout={handleLogout}
             />
           )}
           {currentSection === "saved-bags" && <SavedBagsSection />}

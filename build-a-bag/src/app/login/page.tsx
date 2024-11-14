@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import "./AuthPage.css";
 
@@ -10,23 +11,24 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    // Get the list of users from localStorage
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-
-    // Check if the user exists and credentials are valid
-    const user = users.find(
-      (u: { email: string; password: string }) => u.email === email && u.password === password
-    );
-
-    if (user) {
-      console.log("Login successful");
-      localStorage.setItem("currentUser", email); // Save the logged-in user's email
-      router.push("/user-profile"); // Redirect to user-profile
-    } else {
-      setError("Invalid email or password.");
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/user-profile"); // Redirect to profile page
+        router.refresh(); // Refresh the page to update the session
+      }
+    } catch (error) {
+      setError("An error occurred during login");
     }
   };
 
@@ -62,8 +64,26 @@ const LoginPage: React.FC = () => {
             Log In
           </button>
         </form>
+        
+        <div className="auth-divider">OR</div>
+        
+        <div className="social-login">
+          <button 
+            className="auth-button google-button"
+            onClick={() => signIn("google", { callbackUrl: "/user-profile" })}
+          >
+            Continue with Google
+          </button>
+          <button 
+            className="auth-button github-button"
+            onClick={() => signIn("github", { callbackUrl: "/user-profile" })}
+          >
+            Continue with GitHub
+          </button>
+        </div>
+
         <p className="auth-footer">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <span className="auth-link" onClick={() => router.push("/signup")}>
             Sign Up
           </span>

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import "./AuthPage.css";
+import { signIn } from "next-auth/react";
 
 const SignupPage: React.FC = () => {
   const router = useRouter();
@@ -10,21 +11,50 @@ const SignupPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    if (name && email && password) {
-      // Save the new user to localStorage
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const newUser = { name, email, password };
-      users.push(newUser);
-      localStorage.setItem("users", JSON.stringify(users));
+    try {
+      // Register user
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
 
-      console.log("Account created:", newUser);
-      router.push("/login"); // Redirect to login
-    } else {
-      setError("All fields are required.");
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Error occurred during registration");
+      }
+
+      // If registration successful, sign in automatically
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/user-profile"); // Redirect to profile page
+        router.refresh(); // Refresh to update session
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "An error occurred");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -67,8 +97,12 @@ const SignupPage: React.FC = () => {
             />
           </div>
           {error && <p className="auth-error">{error}</p>}
-          <button className="auth-button" type="submit">
-            Sign Up
+          <button 
+            className="auth-button" 
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
         <p className="auth-footer">
