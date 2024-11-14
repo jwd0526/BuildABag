@@ -1,0 +1,1891 @@
+<documents>
+<document index="1">
+<source>directory-structure.txt</source>
+<document_content>
+build-a-bag/src/app
+├── api
+│   └── auth
+│       ├── [...nextauth]
+│       │   └── route.ts
+│       └── register
+│           └── route.ts
+├── components
+│   └── Nav
+│       ├── Nav.css
+│       └── Nav.tsx
+├── home
+│   ├── LandingPage.css
+│   ├── LandingPage.tsx
+│   └── page.tsx
+├── login
+│   ├── AuthPage.css
+│   └── page.tsx
+├── signup
+│   ├── AuthPage.css
+│   └── page.tsx
+├── user-profile
+│   ├── AccountInfo.tsx
+│   ├── AccountNav.tsx
+│   ├── page.tsx
+│   ├── ProfileInfo.tsx
+│   ├── ProfilePage.module.css
+│   ├── ProfilePage.tsx
+│   └── SavedBagsSection.tsx
+├── globals.css
+├── layout.tsx
+└── page.tsx
+
+11 directories, 21 files
+</document_content>
+</document>
+<document index="2">
+<source>build-a-bag/src/app/home/LandingPage.tsx</source>
+<document_content>
+import Nav from "../components/Nav/Nav";
+import '../../../public/logo.svg';
+import '../../../public/arrow.svg';
+import "./LandingPage.css";
+
+interface LandingPageProps extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) => {
+  return (
+    <div className={`landing-page ${className}`} {...props}>
+      <Nav />
+      <div className="background-overlay">
+        <img className="background-logo" src="logo.svg" alt="Background Logo" />
+      </div>
+      
+      <div className="content">
+        <div className="headline-container">
+          <div className="headline-text">
+            <h1 className="primary-title">Build your golf bag, the way you want it.</h1>
+            <p className="secondary-title">
+              No more jumping around between websites to find the clubs you want.
+            </p>
+          </div>
+        </div>
+        <div className="cta-container">
+          <button className="cta-button">VIEW BUILDS</button>
+          <img className="cta-arrow" src="arrow.svg" alt="Arrow Icon" />
+        </div>
+      </div>
+      <section className="example-section">
+        <div className="example-text">BUILD EXAMPLE</div>
+      </section>
+    </div>
+  );
+};
+
+export default LandingPage;</document_content>
+</document>
+<document index="3">
+<source>build-a-bag/src/app/home/page.tsx</source>
+<document_content>
+import React from 'react';
+import LandingPage from './LandingPage';
+import '../globals.css'
+
+const Home: React.FC = () => {
+  return (
+    <>
+      <div>
+        <LandingPage />
+      </div>
+    </>
+  );
+};
+
+export default Home;</document_content>
+</document>
+<document index="4">
+<source>build-a-bag/src/app/home/LandingPage.css</source>
+<document_content>
+.landing-page {
+  background: #e7e7e7;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: #2c2c2c;
+}
+
+.background-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.background-logo {
+  opacity: 0.15;
+  width: 90%;
+  height: 80%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  justify-content: center;
+  height: 80vh;
+  position: relative;
+}
+
+.headline-container {
+  padding: 0 68px;
+  height: 100px;
+  position: relative;
+}
+
+.headline-text {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  left: 68px;
+  top: 0;
+}
+
+.primary-title {
+  color: #2c2c2c;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.05em;
+  font-size: 49px;
+  line-height: 120%;
+}
+
+.secondary-title {
+  color: 2c2c2c;
+  text-align: center;
+  font-size: 21px;
+  line-height: 120%;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-container {
+  background: #bec8e1;
+  border-radius: 35px;
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  height: 70px;
+  width: fit-content;
+  margin-left: 68px;
+}
+
+.cta-button {
+  color: #2c2c2c;
+  font-size: 25px;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-arrow {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-section {
+  background: linear-gradient(
+    90deg,
+    #bec8e1 0%,
+    #2c2c2c 100%
+  );
+  margin-top: 20px;
+  border-radius: 35px;
+  width: 100%;
+  height: 95vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.example-text {
+  color: #ffffff;
+  font-size: 29px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</document_content>
+</document>
+<document index="5">
+<source>build-a-bag/src/app/layout.tsx</source>
+<document_content>
+"use client";
+
+import React, { ReactNode } from "react";
+import { SessionProvider } from "next-auth/react";
+
+interface RootLayoutProps {
+  children: ReactNode;
+}
+
+const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+  return (
+    <html lang="en">
+      <body>
+        <SessionProvider>{children}</SessionProvider>
+      </body>
+    </html>
+  );
+};
+
+export default RootLayout;</document_content>
+</document>
+<document index="6">
+<source>build-a-bag/src/app/login/AuthPage.css</source>
+<document_content>
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .auth-container {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .auth-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2c2c2c;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .auth-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .auth-label {
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 5px;
+  }
+  
+  .auth-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .auth-input:focus {
+    border-color: #bec8e1;
+    outline: none;
+  }
+  
+  .auth-button {
+    background-color: #bec8e1;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-button:hover {
+    background-color: #a7b8d7;
+  }
+  
+  .auth-error {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  
+  .auth-footer {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555555;
+  }
+  
+  .auth-link {
+    color: #2c2c2c;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .auth-link:hover {
+    color: #bec8e1;
+  }
+  </document_content>
+</document>
+<document index="7">
+<source>build-a-bag/src/app/login/page.tsx</source>
+<document_content>
+"use client";
+
+import React, { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import "./AuthPage.css";
+
+const LoginPage: React.FC = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/user-profile"); // Redirect to profile page
+        router.refresh(); // Refresh the page to update the session
+      }
+    } catch (error) {
+      setError("An error occurred during login");
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      <div className="auth-container">
+        <h1 className="auth-title">Log In</h1>
+        <form className="auth-form" onSubmit={handleLogin}>
+          <div className="auth-input-group">
+            <label className="auth-label">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="auth-input"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className="auth-input-group">
+            <label className="auth-label">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="auth-input"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          {error && <p className="auth-error">{error}</p>}
+          <button className="auth-button" type="submit">
+            Log In
+          </button>
+        </form>
+        
+        <div className="auth-divider">OR</div>
+        
+        <div className="social-login">
+          <button 
+            className="auth-button google-button"
+            onClick={() => signIn("google", { callbackUrl: "/user-profile" })}
+          >
+            Continue with Google
+          </button>
+          <button 
+            className="auth-button github-button"
+            onClick={() => signIn("github", { callbackUrl: "/user-profile" })}
+          >
+            Continue with GitHub
+          </button>
+        </div>
+
+        <p className="auth-footer">
+          Don't have an account?{" "}
+          <span className="auth-link" onClick={() => router.push("/signup")}>
+            Sign Up
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;</document_content>
+</document>
+<document index="8">
+<source>build-a-bag/src/app/components/Nav/Nav.tsx</source>
+<document_content>
+"use client";
+
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import './Nav.css';
+
+interface NavHeaderProps {
+  label: string;
+  isButton: boolean;
+  onClick?: () => void;
+}
+
+const NavHeader: React.FC<NavHeaderProps> = ({ label, isButton, onClick }) => (
+  <div className="navigation-pill clickable" style={{zIndex: 2}}>
+    <div className="nav-header" onClick={isButton && onClick ? onClick : undefined}>
+      {label}
+    </div>
+  </div>
+);
+
+const Nav: React.FC = () => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const handleClubsClick = () => {
+    console.log("Clubs clicked");
+  };
+
+  const handleResourcesClick = () => {
+    console.log("Resources clicked");
+  };
+
+  const handleContactClick = () => {
+    console.log("Contact clicked");
+  };
+
+  const handleAuthClick = () => {
+    if (session) {
+      router.push("/home");
+    } else {
+      router.push("/login");
+    }
+  };
+
+  const handleProfileClick = () => {
+    if (session) {
+      router.push("/user-profile");
+    } else {
+      router.push("/signup");
+    }
+  };
+
+  // Always render the Nav, regardless of auth state
+  return (
+    <div className="header">
+      <div className="navigation-pill-list">
+        <div className="title">
+          <div className="logo-box">
+            <img className="logo" src="/logo.svg" alt="Logo" />
+          </div>
+          <div className="build-a-bag">BuildABag</div>
+        </div>
+        <NavHeader label="Clubs" isButton={true} onClick={handleClubsClick} />
+        <NavHeader label="Resources" isButton={true} onClick={handleResourcesClick} />
+        <NavHeader label="Contact" isButton={true} onClick={handleContactClick} />
+      </div>
+      <div className="header-auth">
+        {/* Auth button changes based on session state */}
+        <NavHeader 
+          label={session ? "Home" : "Log In"} 
+          isButton={true} 
+          onClick={handleAuthClick} 
+        />
+        <div className="profile-button">
+          {/* Profile button changes based on session state */}
+          <NavHeader 
+            label={session ? (session.user?.name?.[0] || 'U') : "Sign Up"} 
+            isButton={true} 
+            onClick={handleProfileClick} 
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Nav;</document_content>
+</document>
+<document index="9">
+<source>build-a-bag/src/app/components/Nav/Nav.css</source>
+<document_content>
+.header {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navigation-pill-list {
+  background: #dadada;
+  border-radius: 35px;
+  display: flex;
+  gap: 20px;
+  padding: 10px 20px 10px 10px;
+}
+
+.title {
+  background: #bec8e1;
+  border-radius: 25px;
+  display: flex;
+  height: 50px;
+  padding: 10px 15px 10px 10px;
+}
+
+.logo-box {
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.build-a-bag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.navigation-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-header {
+  color: #2c2c2c;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.header-auth {
+  background: #dadada;
+  border-radius: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+  height: 70px;
+  padding: 10px 10px 10px 20px;
+}
+
+.profile-button {
+  background: #bec8e1;
+  border-radius: 25px;
+  padding: 0 15px;
+  width: auto;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}</document_content>
+</document>
+<document index="10">
+<source>build-a-bag/src/app/signup/AuthPage.css</source>
+<document_content>
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
+  
+  .auth-container {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .auth-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2c2c2c;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .auth-input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .auth-label {
+    font-size: 14px;
+    color: #555555;
+    margin-bottom: 5px;
+  }
+  
+  .auth-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .auth-input:focus {
+    border-color: #bec8e1;
+    outline: none;
+  }
+  
+  .auth-button {
+    background-color: #bec8e1;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-button:hover {
+    background-color: #a7b8d7;
+  }
+  
+  .auth-error {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  
+  .auth-footer {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555555;
+  }
+  
+  .auth-link {
+    color: #2c2c2c;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .auth-link:hover {
+    color: #bec8e1;
+  }
+  </document_content>
+</document>
+<document index="11">
+<source>build-a-bag/src/app/signup/page.tsx</source>
+<document_content>
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import "./AuthPage.css";
+import { signIn } from "next-auth/react";
+
+const SignupPage: React.FC = () => {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      // Register user
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Error occurred during registration");
+      }
+
+      // If registration successful, sign in automatically
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push("/user-profile"); // Redirect to profile page
+        router.refresh(); // Refresh to update session
+      }
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      <div className="auth-container">
+        <h1 className="auth-title">Sign Up</h1>
+        <form className="auth-form" onSubmit={handleSignup}>
+          <div className="auth-input-group">
+            <label className="auth-label">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="auth-input"
+              placeholder="Enter your name"
+              required
+            />
+          </div>
+          <div className="auth-input-group">
+            <label className="auth-label">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="auth-input"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div className="auth-input-group">
+            <label className="auth-label">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="auth-input"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          {error && <p className="auth-error">{error}</p>}
+          <button 
+            className="auth-button" 
+            type="submit"
+            disabled={loading}
+          >
+            {loading ? "Creating Account..." : "Sign Up"}
+          </button>
+        </form>
+        <p className="auth-footer">
+          Already have an account?{" "}
+          <span className="auth-link" onClick={() => router.push("/login")}>
+            Log In
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default SignupPage;</document_content>
+</document>
+<document index="12">
+<source>build-a-bag/src/app/api/auth/[...nextauth]/route.ts</source>
+<document_content>
+import NextAuth from "next-auth"
+import { AuthOptions } from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import GithubProvider from "next-auth/providers/github"
+import CredentialsProvider from "next-auth/providers/credentials"
+import bcrypt from 'bcryptjs'
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaClient } from '@prisma/client'
+
+// Extend the built-in session types
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    }
+  }
+  
+  interface User {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    password?: string;
+  }
+}
+
+const prisma = new PrismaClient()
+
+export const authOptions: AuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error('Please enter an email and password')
+        }
+
+        const user = await prisma.user.findUnique({
+          where: {
+            email: credentials.email
+          }
+        })
+        
+        if (!user || !user.password) {
+          throw new Error('No user found with this email')
+        }
+          
+        const isValid = await bcrypt.compare(credentials.password, user.password)
+        
+        if (!isValid) {
+          throw new Error('Invalid password')
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        }
+      }
+    }),
+    GithubProvider({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID!,
+      clientSecret: process.env.GOOGLE_SECRET!,
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: '/login',
+    error: '/auth/error',
+  },
+  callbacks: {
+    async session({ session, token }) {
+      if (session.user && token) {
+        session.user.id = token.id as string
+        session.user.name = token.name
+        session.user.email = token.email
+      }
+      return session
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id
+      }
+      return token
+    }
+  }
+}
+
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }</document_content>
+</document>
+<document index="13">
+<source>build-a-bag/src/app/api/auth/register/route.ts</source>
+<document_content>
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
+
+const prisma = new PrismaClient();
+
+export async function POST(request: Request) {
+  try {
+    const { name, email, password } = await request.json();
+
+    // Validate input
+    if (!name || !email || !password) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Check if user already exists
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "User already exists" },
+        { status: 400 }
+      );
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
+
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user;
+
+    return NextResponse.json(
+      {
+        message: "User created successfully",
+        user: userWithoutPassword,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Registration error:", error);
+    return NextResponse.json(
+      { message: "Error creating user" },
+      { status: 500 }
+    );
+  }
+}</document_content>
+</document>
+<document index="14">
+<source>build-a-bag/src/app/user-profile/ProfilePage.module.css</source>
+<document_content>
+.desktop {
+  background-color: #e7e7e7;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Inter, sans-serif;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 40px 100px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.navigationPillList {
+  border-radius: 35px;
+  background-color: #dadada;
+  display: flex;
+  min-width: 240px;
+  align-items: center;
+  gap: 20px;
+  color: #161616;
+  white-space: nowrap;
+  line-height: 1;
+  padding: 10px 25px 10px 10px;
+}
+
+.logoWrapper {
+  border-radius: 25px;
+  background-color: #bec8e1;
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  font-size: 18px;
+  padding: 8px 15px 8px 10px;
+}
+
+.logoImage {
+  aspect-ratio: 1;
+  object-fit: contain;
+  width: 35px;
+  margin: auto 0;
+}
+
+.buildABag {
+  margin: auto 0;
+}
+
+.navLink {
+  padding: 8px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.headerAuth {
+  border-radius: 35px;
+  background-color: #dadada;
+  display: flex;
+  min-height: 70px;
+  align-items: center;
+  gap: 14px;
+  justify-content: center;
+  padding: 10px 10px 10px 20px;
+}
+
+.homeLink {
+  padding: 13px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.userInitials {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #bec8e1;
+  color: #2c2c2c;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.profileSection {
+  border-radius: 35px;
+  background-color: #dadada;
+  display: flex;
+  margin-top: 20px;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  flex: 1;
+  padding: 10px;
+}
+
+.profileInfo {
+  border-radius: 25px;
+  background-color: #e7e7e7;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  color: #2c2c2c;
+}
+
+.avatarBlock {
+  display: flex;
+  min-height: 145px;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  padding: 20px 10px;
+}
+
+.avatarImage {
+  aspect-ratio: 1;
+  object-fit: contain;
+  width: 120px;
+  border-radius: 50%;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 188px;
+}
+
+.userName {
+  font-size: 33px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.membershipStatus {
+  font-size: 18px;
+  font-weight: 400;
+  margin: 8px 0 0;
+}
+
+.accountNavigation {
+  border-radius: 0 0 25px 25px;
+  background-color: #bec8e1;
+  display: flex;
+  min-height: 50px;
+  width: 100%;
+  align-items: center;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 10px;
+}
+
+.navItem {
+  padding: 17px 40px;
+  text-decoration: none;
+  color: #2c2c2c;
+}
+
+.navItem:first-child {
+  background-color: #2c2c2c;
+  color: #bec8e1;
+}
+
+.accountInfoWrapper {
+  border-radius: 25px;
+  background-color: #e7e7e7;
+  display: flex;
+  margin-top: 20px;
+  width: 100%;
+  overflow: hidden;
+  font-weight: 700;
+  line-height: 1;
+  flex: 1;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+.accountInfo {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.sideNavigation {
+  background-color: #2c2c2c;
+  display: flex;
+  min-width: 240px;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 16px;
+  color: #bec8e1;
+  white-space: nowrap;
+  justify-content: space-between;
+  width: 300px;
+}
+
+.sideNavItem {
+  display: block;
+  min-height: 50px;
+  width: 100%;
+  padding: 17px 20px;
+  border: 1px solid #e7e7e7;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sideNavItem:first-child {
+  background-color: #bec8e1;
+  color: #2c2c2c;
+}
+
+.logoutButton {
+  display: flex;
+  min-height: 82px;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 0 24px;
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.logoutIcon {
+  aspect-ratio: 1.36;
+  object-fit: contain;
+  width: 30px;
+}
+
+.infoContent {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  justify-content: center;
+  flex: 1;
+  padding: 60px 200px;
+}
+
+.infoSection {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  color: #2c2c2c;
+  padding: 10px;
+}
+
+.infoTitle {
+  font-size: 19px;
+  padding: 0 20px;
+  margin: 0 0 10px;
+}
+
+.infoRow {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 40px 100px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 20px 20px;
+}
+
+.infoValue {
+  margin: auto 0;
+}
+
+.changeButton {
+  border-radius: 37px;
+  background-color: #bec8e1;
+  min-height: 60px;
+  width: 200px;
+  gap: 8px;
+  overflow: hidden;
+  color: #000;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 17px;
+}
+
+.divider {
+  min-height: 1px;
+  width: 100%;
+  border: none;
+  border-top: 1px solid #000;
+  margin: 10px 0;
+}
+
+@media (max-width: 991px) {
+  .header {
+    max-width: 100%;
+  }
+
+  .navigationPillList {
+    max-width: 100%;
+    padding-right: 20px;
+    white-space: initial;
+  }
+
+  .logoWrapper {
+    white-space: initial;
+  }
+
+  .navLink {
+    white-space: initial;
+  }
+
+  .profileSection {
+    max-width: 100%;
+  }
+
+  .accountNavigation {
+    max-width: 100%;
+  }
+
+  .navItem {
+    padding: 17px 20px;
+  }
+
+  .accountInfoWrapper {
+    max-width: 100%;
+  }
+
+  .sideNavigation {
+    white-space: initial;
+  }
+
+  .sideNavItem {
+    white-space: initial;
+  }
+
+  .logoutButton {
+    white-space: initial;
+    padding: 0 20px;
+  }
+
+  .infoContent {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+
+  .infoRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .changeButton {
+    width: 100%;
+  }
+}
+
+
+.savedBagsSection {
+  margin-top: 20px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.itemList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.itemCard {
+  width: 200px;
+  background: #f4f4f4;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.itemImage {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.itemTitle {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #2c2c2c;
+}
+
+.addItemForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.addItemForm input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.addItemForm button {
+  background-color: #bec8e1;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addItemForm button:hover {
+  background-color: #a7b8d7;
+}
+</document_content>
+</document>
+<document index="15">
+<source>build-a-bag/src/app/user-profile/AccountNav.tsx</source>
+<document_content>
+import React from "react";
+import styles from "./ProfilePage.module.css";
+
+interface AccountNavigationProps {
+  onNavigate: (section: string) => void;
+  activeSection: string;
+}
+
+const AccountNavigation: React.FC<AccountNavigationProps> = ({ onNavigate, activeSection }) => {
+  return (
+    <nav className={styles.accountNavigation}>
+      <button
+        className={`${styles.navItem} ${activeSection === "account" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("account")}
+      >
+        Account
+      </button>
+      <button
+        className={`${styles.navItem} ${activeSection === "profile" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("profile")}
+      >
+        Profile
+      </button>
+      <button
+        className={`${styles.navItem} ${activeSection === "saved-bags" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("saved-bags")}
+      >
+        Saved Bags
+      </button>
+      <button
+        className={`${styles.navItem} ${activeSection === "favorite-clubs" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("favorite-clubs")}
+      >
+        Favorite Clubs
+      </button>
+    </nav>
+  );
+};
+
+export default AccountNavigation;
+</document_content>
+</document>
+<document index="16">
+<source>build-a-bag/src/app/user-profile/ProfilePage.tsx</source>
+<document_content>
+"use client";
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import styles from "./ProfilePage.module.css";
+import Nav from "../components/Nav/Nav";
+import ProfileInfo from "./ProfileInfo";
+import AccountNavigation from "./AccountNav";
+import AccountInfo from "./AccountInfo";
+import SavedBagsSection from "./SavedBagsSection";
+
+const ProfilePage: React.FC = () => {
+  const { data: session, status } = useSession();
+  const [email, setEmail] = useState(session?.user?.email || "");
+  const [phone, setPhone] = useState("+1 (123) 456-7890");
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentSection, setCurrentSection] = useState("account");
+  const router = useRouter();
+
+  // Protect the route
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    router.push("/login");
+    return null;
+  }
+
+  // Logout function
+  const handleLogout = async () => {
+    try {
+      await signOut({ redirect: true, callbackUrl: '/' });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  const updateEmail = async (newEmail: string) => {
+    setIsLoading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setEmail(newEmail);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updatePhone = async (newPhone: string) => {
+    setIsLoading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setPhone(newPhone);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const updatePassword = async (oldPassword: string, newPassword: string) => {
+    setIsLoading(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Add actual password update logic here
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <main className={styles.desktop}>
+      <Nav />
+      <section className={styles.profileSection}>
+        <ProfileInfo 
+          name={session.user?.name || "User"}
+          email={session.user?.email || ""}
+          image={session.user?.image}
+        />
+        <AccountNavigation
+          activeSection={currentSection}
+          onNavigate={(section) => setCurrentSection(section)}
+        />
+        <div className={styles.accountInfoWrapper}>
+          {currentSection === "account" && (
+            <AccountInfo
+              email={email}
+              phone={phone}
+              updateEmail={updateEmail}
+              updatePhone={updatePhone}
+              updatePassword={updatePassword}
+              isLoading={isLoading}
+              onLogout={handleLogout}
+            />
+          )}
+          {currentSection === "saved-bags" && <SavedBagsSection />}
+        </div>
+      </section>
+    </main>
+  );
+};
+
+export default ProfilePage;</document_content>
+</document>
+<document index="17">
+<source>build-a-bag/src/app/user-profile/SavedBagsSection.tsx</source>
+<document_content>
+import React, { useState } from "react";
+import styles from "./ProfilePage.module.css";
+
+interface Item {
+  id: number;
+  title: string;
+  image: string;
+}
+
+const SavedBagsSection: React.FC = () => {
+  const [items, setItems] = useState<Item[]>([
+    { id: 1, title: "Premium Clubs", image: "/item1.jpg" },
+    { id: 2, title: "Nike Golf Ball", image: "/item2.jpg" },
+    { id: 3, title: "Exclusive Golf Gloves", image: "/item3.jpg" },
+    { id: 4, title: "Leather Golf Bag", image: "/item4.jpg" },
+  ]);
+
+  const [newItem, setNewItem] = useState<Item>({ id: 0, title: "", image: "" });
+
+  const handleAddItemChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewItem((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddItemSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newItem.title.trim()) {
+      const newItemWithDefaults = {
+        id: Date.now(),
+        title: newItem.title.trim(),
+        image: newItem.image.trim() || "/logo.svg",
+      };
+      setItems((prev) => [...prev, newItemWithDefaults]);
+      setNewItem({ id: 0, title: "", image: "" });
+    }
+  };
+
+  return (
+    <div className={styles.savedBagsSection}>
+      <h2>Saved Bags</h2>
+      <div className={styles.itemList}>
+        {items.map((item) => (
+          <div key={item.id} className={styles.itemCard}>
+            <img
+              src={item.image}
+              alt={item.title}
+              className={styles.itemImage}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/logo.svg";
+              }}
+            />
+            <p className={styles.itemTitle}>{item.title}</p>
+          </div>
+        ))}
+      </div>
+      <form className={styles.addItemForm} onSubmit={handleAddItemSubmit}>
+        <input
+          type="text"
+          name="title"
+          value={newItem.title}
+          onChange={handleAddItemChange}
+          placeholder="Item Title"
+          required
+        />
+        <input
+          type="text"
+          name="image"
+          value={newItem.image}
+          onChange={handleAddItemChange}
+          placeholder="Image URL (Optional)"
+        />
+        <button type="submit">Add Item</button>
+      </form>
+    </div>
+  );
+};
+
+export default SavedBagsSection;
+</document_content>
+</document>
+<document index="18">
+<source>build-a-bag/src/app/user-profile/page.tsx</source>
+<document_content>
+import React from 'react';
+import ProfilePage from './ProfilePage';
+import '../globals.css'
+
+const Home: React.FC = () => {
+  return (
+    <>
+      <div>
+        <ProfilePage />
+      </div>
+    </>
+  );
+};
+
+export default Home;</document_content>
+</document>
+<document index="19">
+<source>build-a-bag/src/app/user-profile/ProfileInfo.tsx</source>
+<document_content>
+import React from "react";
+import styles from './ProfilePage.module.css';
+
+interface ProfileInfoProps {
+  name: string;
+  email: string;
+  image?: string | null;
+}
+
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ name, email, image }) => {
+  return (
+    <section className={styles.profileInfo}>
+      <div className={styles.avatarBlock}>
+        <img 
+          loading="lazy" 
+          src={image || "/default-avatar.png"} 
+          alt={`${name}'s profile picture`} 
+          className={styles.avatarImage} 
+        />
+        <div className={styles.userInfo}>
+          <h1 className={styles.userName}>{name}</h1>
+          <p className={styles.membershipStatus}>Gold Member</p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ProfileInfo;</document_content>
+</document>
+<document index="20">
+<source>build-a-bag/src/app/user-profile/AccountInfo.tsx</source>
+<document_content>
+import React from "react";
+import styles from "./ProfilePage.module.css";
+
+interface AccountInfoProps {
+  email: string;
+  phone: string;
+  updateEmail: (newEmail: string) => Promise<void>;
+  updatePhone: (newPhone: string) => Promise<void>;
+  updatePassword: (oldPassword: string, newPassword: string) => Promise<void>;
+  isLoading: boolean;
+  onLogout: () => void; // Add the logout function as a prop
+}
+
+const AccountInfo: React.FC<AccountInfoProps> = ({
+  email,
+  phone,
+  updateEmail,
+  updatePhone,
+  updatePassword,
+  isLoading,
+  onLogout, // Destructure the logout function
+}) => {
+  return (
+    <section className={styles.accountInfo}>
+      <aside className={styles.sideNavigation}>
+        <nav>
+          <a href="#info" className={styles.sideNavItem}>
+            Info
+          </a>
+          <a href="#membership" className={styles.sideNavItem}>
+            Membership
+          </a>
+          <a href="#billing" className={styles.sideNavItem}>
+            Billing
+          </a>
+          <a href="#preferences" className={styles.sideNavItem}>
+            Preferences
+          </a>
+        </nav>
+        {/* Logout Button */}
+        <button className={styles.logoutButton} onClick={onLogout}>
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/d635aee04b7da5ebbe603e8b08f6130b9cdd41b0f4a81bf81dade7222c51df1b?placeholderIfAbsent=true&apiKey=9b88e8bde4694705ae2bbf25c8ed8c1f"
+            alt=""
+            className={styles.logoutIcon}
+          />
+          Logout
+        </button>
+      </aside>
+      <div className={styles.infoContent}>
+        <div className={styles.infoSection}>
+          <h2 className={styles.infoTitle}>Email</h2>
+          <div className={styles.infoRow}>
+            <p className={styles.infoValue}>{email}</p>
+            <button
+              className={styles.changeButton}
+              onClick={() => {
+                const newEmail = prompt("Enter new email:");
+                if (newEmail) updateEmail(newEmail);
+              }}
+              disabled={isLoading}
+            >
+              Change Email
+            </button>
+          </div>
+        </div>
+        <hr className={styles.divider} />
+        <div className={styles.infoSection}>
+          <h2 className={styles.infoTitle}>Phone</h2>
+          <div className={styles.infoRow}>
+            <p className={styles.infoValue}>{phone}</p>
+            <button
+              className={styles.changeButton}
+              onClick={() => {
+                const newPhone = prompt("Enter new phone:");
+                if (newPhone) updatePhone(newPhone);
+              }}
+              disabled={isLoading}
+            >
+              Change Phone
+            </button>
+          </div>
+        </div>
+        <hr className={styles.divider} />
+        <div className={styles.infoSection}>
+          <h2 className={styles.infoTitle}>Password</h2>
+          <div className={styles.infoRow}>
+            <button
+              className={styles.changeButton}
+              onClick={() => {
+                const oldPassword = prompt("Enter old password:");
+                const newPassword = prompt("Enter new password:");
+                if (oldPassword && newPassword)
+                  updatePassword(oldPassword, newPassword);
+              }}
+              disabled={isLoading}
+            >
+              Change Password
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default AccountInfo;
+</document_content>
+</document>
+<document index="21">
+<source>build-a-bag/src/app/page.tsx</source>
+<document_content>
+import { redirect } from 'next/navigation'
+
+export default function Page() {
+  redirect('/home')
+}</document_content>
+</document>
+<document index="22">
+<source>build-a-bag/src/app/globals.css</source>
+<document_content>
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: "Inter-Bold", sans-serif;
+}</document_content>
+</document>
+</documents>
