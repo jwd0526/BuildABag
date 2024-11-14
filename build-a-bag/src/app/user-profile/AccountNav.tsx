@@ -1,15 +1,38 @@
 import React from "react";
-import styles from './ProfilePage.module.css';
+import styles from "./ProfilePage.module.css";
 
-interface AccountNavigationProps {}
+interface AccountNavigationProps {
+  onNavigate: (section: string) => void;
+  activeSection: string;
+}
 
-const AccountNavigation: React.FC<AccountNavigationProps> = () => {
+const AccountNavigation: React.FC<AccountNavigationProps> = ({ onNavigate, activeSection }) => {
   return (
     <nav className={styles.accountNavigation}>
-      <a href="#account" className={styles.navItem}>Account</a>
-      <a href="#profile" className={styles.navItem}>Profile</a>
-      <a href="#saved-bags" className={styles.navItem}>Saved Bags</a>
-      <a href="#favorite-clubs" className={styles.navItem}>Favorite Clubs</a>
+      <button
+        className={`${styles.navItem} ${activeSection === "account" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("account")}
+      >
+        Account
+      </button>
+      <button
+        className={`${styles.navItem} ${activeSection === "profile" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("profile")}
+      >
+        Profile
+      </button>
+      <button
+        className={`${styles.navItem} ${activeSection === "saved-bags" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("saved-bags")}
+      >
+        Saved Bags
+      </button>
+      <button
+        className={`${styles.navItem} ${activeSection === "favorite-clubs" ? styles.activeTab : ""}`}
+        onClick={() => onNavigate("favorite-clubs")}
+      >
+        Favorite Clubs
+      </button>
     </nav>
   );
 };
