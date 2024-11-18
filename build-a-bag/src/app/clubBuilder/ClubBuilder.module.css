@@ -1,0 +1,238 @@
+.builder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #dadada;
+  border-radius: 0 35px 0 0;
+}
+
+.savedClubs {
+  width: 275px;
+  min-width: 240px;
+  background-color: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+}
+
+.savedClubsTitle {
+  padding: 23px 20px;
+  color: #2c2c2c;
+  font: 700 19px/1 Inter, sans-serif;
+  background-color: #bec8e1;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 23px 20px;
+  color: #bec8e1;
+  font: 700 15px/1 Inter, sans-serif;
+  border: 1px solid #e7e7e7;
+  width: 100%;
+  background: none;
+  cursor: pointer;
+}
+
+.categoryItem:hover,
+.categoryItem:focus {
+  background-color: #3c3c3c;
+}
+
+.categoryItem.active {
+  background-color: #3c3c3c;
+}
+
+.categoryIcon {
+  width: 8px;
+  height: 16px;
+}
+
+.searchContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 255px;
+  padding: 9px 10px;
+  background-color: #bec8e1;
+  border-radius: 0 25px 25px 0;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 20px;
+  background-color: #e7e7e7;
+  border: none;
+  font: 400 13px/1 Inter, sans-serif;
+  color: #2c2c2c;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.listBuilder {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #bec8e1;
+  border-radius: 0 25px 0 0;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.myBag {
+  font: 700 18px/1 Inter, sans-serif;
+  color: #2c2c2c;
+}
+
+.updated {
+  font: 400 12px/1 Inter, sans-serif;
+  color: rgba(44, 44, 44, 0.8);
+}
+
+.clubList {
+  flex: 1;
+  background-color: #e7e7e7;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.clubCard {
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 15px;
+}
+
+.clubType {
+  font: 700 15px/1 Inter, sans-serif;
+  color: #2c2c2c;
+  margin-bottom: 10px;
+}
+
+.clubDetails {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.clubName,
+.clubCompany,
+.clubPrice {
+  font: 700 13px/1 Inter, sans-serif;
+  color: #2c2c2c;
+}
+
+.clubLink {
+  color: #5b9dd0;
+  text-decoration: none;
+  border-bottom: 1px solid #5f86be;
+}
+
+.compareButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 15px;
+  background-color: #bec8e1;
+  border-radius: 37px;
+  border: none;
+  cursor: pointer;
+  font: 400 13px/1 Inter, sans-serif;
+}
+
+.compareButton:hover,
+.compareButton:focus {
+  background-color: #a9b6d4;
+}
+
+.compareIcon {
+  width: 15px;
+  height: 15px;
+}
+
+.specInfo {
+  background-color: #bec8e1;
+  border-radius: 0 0 37px 37px;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.specList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.specification {
+  display: flex;
+  justify-content: space-between;
+  font: 400 12px/1 Inter, sans-serif;
+  color: #2c2c2c;
+  padding: 5px 0;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.manufacturerInfo,
+.sellerInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logoImage {
+  width: 80px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.addClubButton {
+  width: 111px;
+  height: 35px;
+  margin: 20px auto;
+  background-color: #bec8e1;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plusIcon {
+  font-size: 24px;
+  color: #2c2c2c;
+}
+
+@media (max-width: 991px) {
+  .builder,
+  .listBuilder,
+  .clubList,
+  .clubCard,
+  .clubDetails {
+    max-width: 100%;
+  }
+
+  .heading {
+    padding-right: 20px;
+  }
+
+  .clubDetails {
+    flex-wrap: wrap;
+  }
+}
