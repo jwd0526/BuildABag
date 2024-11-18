@@ -72,8 +72,3 @@
   align-items: center;
   justify-content: center;
 }
-
-.clickable:hover {
-  cursor: pointer;
-  opacity: 0.8;
-}

@@ -4,12 +4,32 @@
 <document_content>
 build-a-bag/src/app
 ├── api
-│   └── auth
-│       ├── [...nextauth]
-│       │   └── route.ts
-│       └── register
-│           └── route.ts
+│   ├── auth
+│   │   ├── [...nextauth]
+│   │   │   └── route.ts
+│   │   └── register
+│   │       └── route.ts
+│   ├── bags
+│   │   └── route.ts
+│   └── clubs
+│       └── route.ts
+├── clubBuilder
+│   ├── ClubBuilder.module.css
+│   ├── ClubBuilder.tsx
+│   ├── ClubCard.tsx
+│   ├── ClubList.tsx
+│   ├── ClubSpecifications.tsx
+│   ├── CompareButton.tsx
+│   ├── page.tsx
+│   ├── SavedClubCategory.tsx
+│   ├── SearchBar.tsx
+│   └── types.ts
 ├── components
+│   ├── AuthLayout
+│   │   ├── AuthLayout.module.css
+│   │   └── AuthLayout.tsx
+│   ├── Loading
+│   │   └── Loading.tsx
 │   └── Nav
 │       ├── Nav.css
 │       └── Nav.tsx
@@ -18,10 +38,12 @@ build-a-bag/src/app
 │   ├── LandingPage.tsx
 │   └── page.tsx
 ├── login
-│   ├── AuthPage.css
+│   └── page.tsx
+├── my-bags
+│   ├── BuilderDashboard.module.css
+│   ├── BuilderDashboard.tsx
 │   └── page.tsx
 ├── signup
-│   ├── AuthPage.css
 │   └── page.tsx
 ├── user-profile
 │   ├── AccountInfo.tsx
@@ -35,12 +57,14 @@ build-a-bag/src/app
 ├── layout.tsx
 └── page.tsx
 
-11 directories, 21 files
+17 directories, 37 files
 </document_content>
 </document>
 <document index="2">
 <source>build-a-bag/src/app/home/LandingPage.tsx</source>
 <document_content>
+"use client";
+
 import Nav from "../components/Nav/Nav";
 import '../../../public/logo.svg';
 import '../../../public/arrow.svg';
@@ -51,6 +75,16 @@ interface LandingPageProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) => {
+  const handleCTA = () => {
+    const exampleSection = document.querySelector('.example-section');
+    if (exampleSection) {
+      exampleSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <div className={`landing-page ${className}`} {...props}>
       <Nav />
@@ -67,7 +101,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) =
             </p>
           </div>
         </div>
-        <div className="cta-container">
+        <div className="cta-container clickable" onClick={handleCTA}>
           <button className="cta-button">VIEW BUILDS</button>
           <img className="cta-arrow" src="arrow.svg" alt="Arrow Icon" />
         </div>
@@ -86,7 +120,6 @@ export default LandingPage;</document_content>
 <document_content>
 import React from 'react';
 import LandingPage from './LandingPage';
-import '../globals.css'
 
 const Home: React.FC = () => {
   return (
@@ -241,6 +274,7 @@ export default Home;</document_content>
 
 import React, { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
+import './globals.css'
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -259,106 +293,6 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
 export default RootLayout;</document_content>
 </document>
 <document index="6">
-<source>build-a-bag/src/app/login/AuthPage.css</source>
-<document_content>
-.auth-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f4f4f4;
-    padding: 20px;
-  }
-  
-  .auth-container {
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 40px 30px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .auth-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #2c2c2c;
-  }
-  
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .auth-input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .auth-label {
-    font-size: 14px;
-    color: #555555;
-    margin-bottom: 5px;
-  }
-  
-  .auth-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #dadada;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .auth-input:focus {
-    border-color: #bec8e1;
-    outline: none;
-  }
-  
-  .auth-button {
-    background-color: #bec8e1;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .auth-button:hover {
-    background-color: #a7b8d7;
-  }
-  
-  .auth-error {
-    color: #ff4d4d;
-    font-size: 14px;
-    margin: 5px 0;
-  }
-  
-  .auth-footer {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #555555;
-  }
-  
-  .auth-link {
-    color: #2c2c2c;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .auth-link:hover {
-    color: #bec8e1;
-  }
-  </document_content>
-</document>
-<document index="7">
 <source>build-a-bag/src/app/login/page.tsx</source>
 <document_content>
 "use client";
@@ -366,16 +300,25 @@ export default RootLayout;</document_content>
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import "./AuthPage.css";
+import { LoadingButton } from "../components/Loading/Loading";
+import AuthLayout from "../components/AuthLayout/AuthLayout";
+import styles from '../components/AuthLayout/AuthLayout.module.css';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState({
+    google: false,
+    github: false
+  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
     
     try {
       const result = await signIn("credentials", {
@@ -387,80 +330,557 @@ const LoginPage: React.FC = () => {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push("/user-profile"); // Redirect to profile page
-        router.refresh(); // Refresh the page to update the session
+        router.push("/user-profile");
+        router.refresh();
       }
     } catch (error) {
       setError("An error occurred during login");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider: 'google' | 'github') => {
+    setSocialLoading(prev => ({ ...prev, [provider]: true }));
+    try {
+      await signIn(provider, { callbackUrl: "/user-profile" });
+    } catch (error) {
+      setError(`Error signing in with ${provider}`);
+      setSocialLoading(prev => ({ ...prev, [provider]: false }));
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h1 className="auth-title">Log In</h1>
-        <form className="auth-form" onSubmit={handleLogin}>
-          <div className="auth-input-group">
-            <label className="auth-label">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <label className="auth-label">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button className="auth-button" type="submit">
-            Log In
-          </button>
-        </form>
-        
-        <div className="auth-divider">OR</div>
-        
-        <div className="social-login">
-          <button 
-            className="auth-button google-button"
-            onClick={() => signIn("google", { callbackUrl: "/user-profile" })}
-          >
-            Continue with Google
-          </button>
-          <button 
-            className="auth-button github-button"
-            onClick={() => signIn("github", { callbackUrl: "/user-profile" })}
-          >
-            Continue with GitHub
-          </button>
+    <AuthLayout title="Log In">
+      <form className={styles.authForm} onSubmit={handleLogin}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your email"
+            required
+            disabled={isLoading}
+          />
         </div>
-
-        <p className="auth-footer">
-          Don't have an account?{" "}
-          <span className="auth-link" onClick={() => router.push("/signup")}>
-            Sign Up
-          </span>
-        </p>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your password"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        {error && <p className={styles.error}>{error}</p>}
+        <LoadingButton
+          type="submit"
+          className={styles.button}
+          loading={isLoading}
+        >
+          Log In
+        </LoadingButton>
+      </form>
+      
+      <div className={styles.divider}>OR</div>
+      
+      <div className={styles.socialLogin}>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('google')}
+          loading={socialLoading.google}
+        >
+          Continue with Google
+        </LoadingButton>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('github')}
+          loading={socialLoading.github}
+        >
+          Continue with GitHub
+        </LoadingButton>
       </div>
-    </div>
+
+      <p className={styles.footer}>
+        Don't have an account?{" "}
+        <span 
+          className={styles.link}
+          onClick={() => !isLoading && router.push("/signup")}
+          style={{ opacity: isLoading ? 0.5 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
+        >
+          Sign Up
+        </span>
+      </p>
+    </AuthLayout>
   );
 };
 
 export default LoginPage;</document_content>
 </document>
+<document index="7">
+<source>build-a-bag/src/app/my-bags/BuilderDashboard.module.css</source>
+<document_content>
+/* BuilderDashboard.module.css */
+.dashboard {
+    display: flex;
+    height: calc(100vh - 110px);
+    background-color: #e7e7e7;
+    border-radius: 35px;
+    overflow: hidden;
+}
+  
+.sidebar {
+    width: 300px;
+    background-color: #dadada;
+    border-right: 1px solid #bec8e1;
+    display: flex;
+    flex-direction: column;
+}
+  
+.sidebarHeader {
+    padding: 20px;
+    background-color: #bec8e1;
+    border-radius: 25px 0 0 0;
+}
+  
+.sidebarTitle {
+    color: #2c2c2c;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+  
+.createButton {
+    width: 100%;
+    background-color: #2c2c2c;
+    color: #bec8e1;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.createButton:hover {
+    background-color: #3c3c3c;
+}
+  
+.bagList {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+  
+.bagItem {
+    background-color: #e7e7e7;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    padding: 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+  
+.bagItem:hover {
+    background-color: #bec8e1;
+}
+  
+.bagItem.selected {
+    background-color: #bec8e1;
+    border: 2px solid #2c2c2c;
+}
+  
+.bagInfo {
+    flex: 1;
+}
+  
+.bagName {
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 5px;
+}
+  
+.bagDate {
+    font-size: 12px;
+    color: #666;
+}
+  
+.deleteButton {
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.deleteButton:hover {
+    background-color: #cc0000;
+}
+  
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #e7e7e7;
+}
+  
+.builderContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+  
+.builderHeader {
+    background-color: #bec8e1;
+    padding: 20px;
+    border-radius: 25px 25px 0 0;
+    margin-bottom: 20px;
+}
+  
+.builderTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 10px;
+}
+  
+.descriptionInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #2c2c2c;
+    border-radius: 15px;
+    background-color: #e7e7e7;
+    color: #2c2c2c;
+}
+  
+.emptyState {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    color: #666;
+    text-align: center;
+}
+  
+.emptyState h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 20px;
+}
+  
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+  
+    .sidebar {
+        width: 100%;
+        max-height: 300px;
+    }
+  
+    .content {
+        padding: 10px;
+    }
+}</document_content>
+</document>
 <document index="8">
+<source>build-a-bag/src/app/my-bags/page.tsx</source>
+<document_content>
+// page.tsx
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import BuilderDashboard from './BuilderDashboard';
+import Nav from '../components/Nav/Nav';
+import { PageLoading, ProfileSkeleton } from '../components/Loading/Loading';
+import { PrismaClient } from '@prisma/client';
+
+// Types
+interface Bag {
+  id: string;
+  name: string;
+  description: string;
+  userId: string;
+  created: Date;
+  lastModified: Date;
+  clubs: any[]; // Replace with proper club type
+}
+
+interface ApiResponse {
+  success: boolean;
+  data?: Bag[];
+  error?: string;
+}
+
+const MyBagsPage: React.FC = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [bags, setBags] = useState<Bag[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Redirect to login if not authenticated
+    if (status === 'unauthenticated') {
+      router.push('/login');
+      return;
+    }
+
+    // Fetch bags if authenticated
+    if (status === 'authenticated' && session?.user?.id) {
+      fetchUserBags();
+    }
+  }, [status, session?.user?.id]);
+
+  const fetchUserBags = async () => {
+    try {
+      const response = await fetch(`/api/bags?userId=${session?.user?.id}`);
+      const result: ApiResponse = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch bags');
+      }
+
+      if (result.data) {
+        setBags(result.data);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred while fetching bags');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Show loading state while session is loading
+  if (status === 'loading' || isLoading) {
+    return (
+      <div className="min-h-screen bg-[#e7e7e7]">
+        <div className="p-5">
+          <Nav />
+        </div>
+        <PageLoading />
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#e7e7e7]">
+        <div className="p-5">
+          <Nav />
+          <div className="flex flex-col items-center justify-center mt-20">
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <strong className="font-bold">Error: </strong>
+              <span className="block sm:inline">{error}</span>
+              <button 
+                className="bg-[#bec8e1] text-[#2c2c2c] font-bold py-2 px-4 rounded mt-4"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show authenticated content
+  return (
+    <div className="min-h-screen bg-[#e7e7e7]">
+      <div className="p-5">
+        <Nav />
+        <BuilderDashboard 
+          initialBags={bags}
+          onBagsUpdate={async (updatedBags) => {
+            // Here you would typically sync with the backend
+            try {
+              await fetch('/api/bags/sync', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  userId: session?.user?.id,
+                  bags: updatedBags,
+                }),
+              });
+            } catch (err) {
+              console.error('Failed to sync bags:', err);
+              // Optionally show an error toast/notification
+            }
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default MyBagsPage;</document_content>
+</document>
+<document index="9">
+<source>build-a-bag/src/app/my-bags/BuilderDashboard.tsx</source>
+<document_content>
+// BuilderDashboard.tsx
+import React, { useState } from 'react';
+import styles from './BuilderDashboard.module.css';
+import { ClubBuilder } from '../clubBuilder/ClubBuilder';
+import { LoadingButton } from '../components/Loading/Loading';
+
+interface Bag {
+  id: string;
+  name: string;
+  description: string;
+  created: Date;
+  lastModified: Date;
+  clubs: any[]; // Replace with proper club type
+}
+
+interface BuilderDashboardProps {
+  initialBags: Bag[];
+  onBagsUpdate: (updatedBags: Bag[]) => Promise<void>;
+}
+
+const BuilderDashboard: React.FC<BuilderDashboardProps> = ({ initialBags, onBagsUpdate }) => {
+  const [bags, setBags] = useState<Bag[]>(initialBags);
+  const [isCreatingBag, setIsCreatingBag] = useState(false);
+  const [selectedBag, setSelectedBag] = useState<Bag | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreateBag = () => {
+    setIsCreatingBag(true);
+    const newBag: Bag = {
+      id: Date.now().toString(),
+      name: `My Bag ${bags.length + 1}`,
+      description: '',
+      created: new Date(),
+      lastModified: new Date(),
+      clubs: []
+    };
+    setBags([...bags, newBag]);
+    setSelectedBag(newBag);
+  };
+
+  const handleSelectBag = (bag: Bag) => {
+    setSelectedBag(bag);
+    setIsCreatingBag(false);
+  };
+
+  const handleUpdateBag = async (updatedBag: Bag) => {
+    const updatedBags = bags.map(bag => 
+      bag.id === updatedBag.id ? { ...updatedBag, lastModified: new Date() } : bag
+    );
+    setBags(updatedBags);
+    await onBagsUpdate(updatedBags);
+  };
+
+  const handleDeleteBag = async (bagId: string) => {
+    const filteredBags = bags.filter(bag => bag.id !== bagId);
+    setBags(filteredBags);
+    if (selectedBag?.id === bagId) {
+      setSelectedBag(null);
+    }
+    await onBagsUpdate(filteredBags);
+  };
+
+  return (
+    <div className={styles.dashboard}>
+      <aside className={styles.sidebar}>
+        <div className={styles.sidebarHeader}>
+          <h2 className={styles.sidebarTitle}>My Bags</h2>
+          <LoadingButton
+            onClick={handleCreateBag}
+            loading={isLoading}
+            className={styles.createButton}
+          >
+            Create New Bag
+          </LoadingButton>
+        </div>
+        <div className={styles.bagList}>
+          {bags.map(bag => (
+            <div
+              key={bag.id}
+              className={`${styles.bagItem} ${selectedBag?.id === bag.id ? styles.selected : ''}`}
+              onClick={() => handleSelectBag(bag)}
+            >
+              <div className={styles.bagInfo}>
+                <h3 className={styles.bagName}>{bag.name}</h3>
+                <p className={styles.bagDate}>
+                  Last modified: {new Date(bag.lastModified).toLocaleDateString()}
+                </p>
+              </div>
+              <button
+                className={styles.deleteButton}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDeleteBag(bag.id);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
+      </aside>
+      
+      <main className={styles.content}>
+        {selectedBag ? (
+          <div className={styles.builderContainer}>
+            <div className={styles.builderHeader}>
+              <h1 className={styles.builderTitle}>{selectedBag.name}</h1>
+              <input
+                type="text"
+                value={selectedBag.description}
+                onChange={(e) => handleUpdateBag({
+                  ...selectedBag,
+                  description: e.target.value
+                })}
+                placeholder="Add bag description..."
+                className={styles.descriptionInput}
+              />
+            </div>
+            <ClubBuilder />
+          </div>
+        ) : (
+          <div className={styles.emptyState}>
+            <h2>Select a bag or create a new one to get started</h2>
+            <LoadingButton
+              onClick={handleCreateBag}
+              loading={isLoading}
+              className={styles.createButton}
+            >
+              Create New Bag
+            </LoadingButton>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default BuilderDashboard;</document_content>
+</document>
+<document index="10">
 <source>build-a-bag/src/app/components/Nav/Nav.tsx</source>
 <document_content>
+// components/Nav/Nav.tsx
 "use client";
 
 import { useRouter } from 'next/navigation';
@@ -486,7 +906,7 @@ const Nav: React.FC = () => {
   const { data: session, status } = useSession();
 
   const handleClubsClick = () => {
-    console.log("Clubs clicked");
+    router.push("/my-bags");  // Updated to route to my-bags
   };
 
   const handleResourcesClick = () => {
@@ -513,11 +933,15 @@ const Nav: React.FC = () => {
     }
   };
 
+  const handleTitleClick = () => {
+    router.push("/home");
+  }
+
   // Always render the Nav, regardless of auth state
   return (
     <div className="header">
       <div className="navigation-pill-list">
-        <div className="title">
+        <div className="title clickable" onClick={handleTitleClick}>
           <div className="logo-box">
             <img className="logo" src="/logo.svg" alt="Logo" />
           </div>
@@ -528,14 +952,12 @@ const Nav: React.FC = () => {
         <NavHeader label="Contact" isButton={true} onClick={handleContactClick} />
       </div>
       <div className="header-auth">
-        {/* Auth button changes based on session state */}
         <NavHeader 
           label={session ? "Home" : "Log In"} 
           isButton={true} 
           onClick={handleAuthClick} 
         />
         <div className="profile-button">
-          {/* Profile button changes based on session state */}
           <NavHeader 
             label={session ? (session.user?.name?.[0] || 'U') : "Sign Up"} 
             isButton={true} 
@@ -549,7 +971,7 @@ const Nav: React.FC = () => {
 
 export default Nav;</document_content>
 </document>
-<document index="9">
+<document index="11">
 <source>build-a-bag/src/app/components/Nav/Nav.css</source>
 <document_content>
 .header {
@@ -626,121 +1048,265 @@ export default Nav;</document_content>
   align-items: center;
   justify-content: center;
 }
-
-.clickable:hover {
-  cursor: pointer;
-  opacity: 0.8;
-}</document_content>
+</document_content>
 </document>
-<document index="10">
-<source>build-a-bag/src/app/signup/AuthPage.css</source>
+<document index="12">
+<source>build-a-bag/src/app/components/Loading/Loading.tsx</source>
 <document_content>
-.auth-page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f4f4f4;
-    padding: 20px;
-  }
+import React from 'react';
+import { Loader2 } from "lucide-react";
+
+// Reusable loading spinner component
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center">
+    <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+  </div>
+);
+
+interface LoadingButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    children: React.ReactNode;
+    loading?: boolean;
+    disabled?: boolean;
+    className?: string;
+}
   
-  .auth-container {
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 40px 30px;
-    max-width: 400px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  .auth-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #2c2c2c;
-  }
-  
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .auth-input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .auth-label {
-    font-size: 14px;
-    color: #555555;
-    margin-bottom: 5px;
-  }
-  
-  .auth-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #dadada;
-    border-radius: 5px;
-    font-size: 14px;
-  }
-  
-  .auth-input:focus {
-    border-color: #bec8e1;
-    outline: none;
-  }
-  
-  .auth-button {
-    background-color: #bec8e1;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .auth-button:hover {
-    background-color: #a7b8d7;
-  }
-  
-  .auth-error {
-    color: #ff4d4d;
-    font-size: 14px;
-    margin: 5px 0;
-  }
-  
-  .auth-footer {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #555555;
-  }
-  
-  .auth-link {
-    color: #2c2c2c;
-    font-weight: bold;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .auth-link:hover {
-    color: #bec8e1;
-  }
-  </document_content>
+const LoadingButton: React.FC<LoadingButtonProps> = ({
+    children,
+    loading = false,
+    disabled = false,
+    className = "",
+    ...props
+}) => (
+    <button
+        className={`relative flex items-center justify-center ${
+            loading ? "text-transparent" : ""
+        } ${className}`}
+        disabled={disabled || loading}
+        {...props}
+    >
+        {loading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+                <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
+        )}
+        {children}
+    </button>
+);
+
+// Full page loading state
+const PageLoading = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="text-center">
+      <Loader2 className="h-8 w-8 animate-spin mx-auto text-gray-500" />
+      <p className="mt-2 text-gray-600">Loading...</p>
+    </div>
+  </div>
+);
+
+// Skeleton loader for profile section
+const ProfileSkeleton = () => (
+  <div className="space-y-4 p-4">
+    <div className="flex items-center space-x-4">
+      <div className="h-12 w-12 rounded-full bg-gray-200 animate-pulse" />
+      <div className="space-y-2">
+        <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
+        <div className="h-3 w-24 bg-gray-200 rounded animate-pulse" />
+      </div>
+    </div>
+    <div className="space-y-3">
+      <div className="h-4 w-full bg-gray-200 rounded animate-pulse" />
+      <div className="h-4 w-5/6 bg-gray-200 rounded animate-pulse" />
+      <div className="h-4 w-4/6 bg-gray-200 rounded animate-pulse" />
+    </div>
+  </div>
+);
+
+export { LoadingSpinner, LoadingButton, PageLoading, ProfileSkeleton };</document_content>
 </document>
-<document index="11">
+<document index="13">
+<source>build-a-bag/src/app/components/AuthLayout/AuthLayout.module.css</source>
+<document_content>
+.authPage {
+  min-height: 100vh;
+  background-color: #e7e7e7;
+}
+
+.navWrapper {
+  padding: 20px;
+}
+
+.contentWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.authContainer {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+.authTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Form Styles */
+.authForm {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  font-size: 14px;
+  color: #555555;
+  margin-bottom: 5px;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.input:focus {
+  border-color: #bec8e1;
+  outline: none;
+}
+
+.button {
+  background-color: #bec8e1;
+  color: #2c2c2c;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #a7b8d7;
+}
+
+.error {
+  color: #ff4d4d;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.footer {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555555;
+  text-align: center;
+}
+
+.link {
+  color: #2c2c2c;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link:hover {
+  color: #bec8e1;
+}
+
+.divider {
+  text-align: center;
+  margin: 15px 0;
+  color: #555555;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background-color: #dadada;
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.socialLogin {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+</document_content>
+</document>
+<document index="14">
+<source>build-a-bag/src/app/components/AuthLayout/AuthLayout.tsx</source>
+<document_content>
+import React from 'react';
+import styles from './AuthLayout.module.css';
+import Nav from '../Nav/Nav';
+
+interface AuthLayoutProps {
+  children: React.ReactNode;
+  title: string;
+}
+
+const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
+  return (
+    <div className={styles.authPage}>
+      <div className={styles.navWrapper}>
+        <Nav />
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.authContainer}>
+          <h1 className={styles.authTitle}>
+            {title}
+          </h1>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AuthLayout;</document_content>
+</document>
+<document index="15">
 <source>build-a-bag/src/app/signup/page.tsx</source>
 <document_content>
 "use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import "./AuthPage.css";
 import { signIn } from "next-auth/react";
+import { LoadingButton } from "../components/Loading/Loading";
+import AuthLayout from "../components/AuthLayout/AuthLayout";
+import styles from '../components/AuthLayout/AuthLayout.module.css';
 
 const SignupPage: React.FC = () => {
   const router = useRouter();
@@ -748,11 +1314,15 @@ const SignupPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState({
+    google: false,
+    github: false
+  });
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     setError("");
 
     try {
@@ -785,77 +1355,285 @@ const SignupPage: React.FC = () => {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push("/user-profile"); // Redirect to profile page
-        router.refresh(); // Refresh to update session
+        router.push("/user-profile");
+        router.refresh();
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider: 'google' | 'github') => {
+    setSocialLoading(prev => ({ ...prev, [provider]: true }));
+    try {
+      await signIn(provider, { callbackUrl: "/user-profile" });
+    } catch (error) {
+      setError(`Error signing in with ${provider}`);
+      setSocialLoading(prev => ({ ...prev, [provider]: false }));
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h1 className="auth-title">Sign Up</h1>
-        <form className="auth-form" onSubmit={handleSignup}>
-          <div className="auth-input-group">
-            <label className="auth-label">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your name"
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <label className="auth-label">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <label className="auth-label">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button 
-            className="auth-button" 
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Creating Account..." : "Sign Up"}
-          </button>
-        </form>
-        <p className="auth-footer">
-          Already have an account?{" "}
-          <span className="auth-link" onClick={() => router.push("/login")}>
-            Log In
-          </span>
-        </p>
+    <AuthLayout title="Sign Up">
+      <form className={styles.authForm} onSubmit={handleSignup}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your name"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your email"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your password"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        {error && <p className={styles.error}>{error}</p>}
+        <LoadingButton 
+          type="submit"
+          className={styles.button}
+          loading={isLoading}
+        >
+          Sign Up
+        </LoadingButton>
+      </form>
+
+      <div className={styles.divider}>OR</div>
+      
+      <div className={styles.socialLogin}>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('google')}
+          loading={socialLoading.google}
+        >
+          Continue with Google
+        </LoadingButton>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('github')}
+          loading={socialLoading.github}
+        >
+          Continue with GitHub
+        </LoadingButton>
       </div>
-    </div>
+
+      <p className={styles.footer}>
+        Already have an account?{" "}
+        <span 
+          className={styles.link}
+          onClick={() => !isLoading && router.push("/login")}
+          style={{ opacity: isLoading ? 0.5 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
+        >
+          Log In
+        </span>
+      </p>
+    </AuthLayout>
   );
 };
 
 export default SignupPage;</document_content>
 </document>
-<document index="12">
+<document index="16">
+<source>build-a-bag/src/app/api/bags/route.ts</source>
+<document_content>
+// app/api/bags/route.ts
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
+
+const prisma = new PrismaClient();
+
+export async function GET(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+
+    if (userId !== session.user.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    // Use the correct model name based on your Prisma schema
+    const bags = await prisma.bag.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        clubs: true,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: bags });
+  } catch (error) {
+    console.error("Error fetching bags:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch bags" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    
+    const newBag = await prisma.bag.create({
+      data: {
+        name: body.name,
+        description: body.description,
+        userId: session.user.id,
+        clubs: {
+          create: body.clubs || [],
+        },
+      },
+      include: {
+        clubs: true,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: newBag });
+  } catch (error) {
+    console.error("Error creating bag:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to create bag" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    
+    const updatedBag = await prisma.bag.update({
+      where: {
+        id: body.id,
+        userId: session.user.id, // Ensure user owns the bag
+      },
+      data: {
+        name: body.name,
+        description: body.description,
+        lastModified: new Date(),
+      },
+      include: {
+        clubs: true,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: updatedBag });
+  } catch (error) {
+    console.error("Error updating bag:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update bag" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const bagId = searchParams.get("bagId");
+
+    if (!bagId) {
+      return NextResponse.json(
+        { success: false, error: "Bag ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Delete the bag and all related clubs (cascade delete should handle this)
+    await prisma.bag.delete({
+      where: {
+        id: bagId,
+        userId: session.user.id, // Ensure user owns the bag
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting bag:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete bag" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}</document_content>
+</document>
+<document index="17">
 <source>build-a-bag/src/app/api/auth/[...nextauth]/route.ts</source>
 <document_content>
 import NextAuth from "next-auth"
@@ -962,7 +1740,7 @@ export const authOptions: AuthOptions = {
 const handler = NextAuth(authOptions)
 export { handler as GET, handler as POST }</document_content>
 </document>
-<document index="13">
+<document index="18">
 <source>build-a-bag/src/app/api/auth/register/route.ts</source>
 <document_content>
 import { NextResponse } from "next/server";
@@ -1028,7 +1806,821 @@ export async function POST(request: Request) {
   }
 }</document_content>
 </document>
-<document index="14">
+<document index="19">
+<source>build-a-bag/src/app/api/clubs/route.ts</source>
+<document_content>
+// app/api/clubs/route.ts
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]/route";
+
+const prisma = new PrismaClient();
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { bagId, club } = await request.json();
+
+    // Verify bag ownership
+    const bag = await prisma.bag.findFirst({
+      where: {
+        id: bagId,
+        userId: session.user.id
+      }
+    });
+
+    if (!bag) {
+      return NextResponse.json(
+        { success: false, error: "Bag not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
+    // Create club
+    const newClub = await prisma.club.create({
+      data: {
+        type: club.type,
+        brand: club.brand,
+        model: club.model,
+        loft: club.loft,
+        specification: club.specification,
+        imageUrl: club.imageUrl,
+        bagId: bagId
+      }
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      data: newClub 
+    });
+
+  } catch (error) {
+    console.error("Error creating club:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to create club" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const clubId = searchParams.get("clubId");
+    const bagId = searchParams.get("bagId");
+
+    if (!clubId || !bagId) {
+      return NextResponse.json(
+        { success: false, error: "Missing clubId or bagId" },
+        { status: 400 }
+      );
+    }
+
+    // Verify bag ownership
+    const bag = await prisma.bag.findFirst({
+      where: {
+        id: bagId,
+        userId: session.user.id
+      }
+    });
+
+    if (!bag) {
+      return NextResponse.json(
+        { success: false, error: "Bag not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
+    // Delete club
+    await prisma.club.delete({
+      where: {
+        id: clubId,
+      }
+    });
+
+    return NextResponse.json({ success: true });
+
+  } catch (error) {
+    console.error("Error deleting club:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to delete club" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { clubId, bagId, updates } = await request.json();
+
+    // Verify bag ownership
+    const bag = await prisma.bag.findFirst({
+      where: {
+        id: bagId,
+        userId: session.user.id
+      }
+    });
+
+    if (!bag) {
+      return NextResponse.json(
+        { success: false, error: "Bag not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
+    // Update club
+    const updatedClub = await prisma.club.update({
+      where: {
+        id: clubId,
+      },
+      data: {
+        ...updates,
+        updatedAt: new Date()
+      }
+    });
+
+    return NextResponse.json({ 
+      success: true, 
+      data: updatedClub 
+    });
+
+  } catch (error) {
+    console.error("Error updating club:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to update club" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}</document_content>
+</document>
+<document index="20">
+<source>build-a-bag/src/app/clubBuilder/ClubBuilder.tsx</source>
+<document_content>
+import React, { useState } from "react";
+import styles from "./ClubBuilder.module.css";
+import { SavedClubCategory } from "./SavedClubCategory";
+import { SearchBar } from "./SearchBar";
+import { ClubList } from "./ClubList";
+
+export const ClubBuilder: React.FC = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const categories = [
+    { name: "Drivers", icon: "/icons/driver.svg" },
+    { name: "Woods", icon: "/icons/wood.svg" },
+    { name: "Irons", icon: "/icons/iron.svg" },
+    { name: "Wedges", icon: "/icons/wedge.svg" },
+    { name: "Putters", icon: "/icons/putter.svg" },
+    { name: "Bags", icon: "/icons/bag.svg" },
+  ];
+
+  return (
+    <main className={styles.builder} role="main">
+      <aside
+        className={styles.savedClubs}
+        role="complementary"
+        aria-label="Saved Clubs Categories"
+      >
+        <h1 className={styles.savedClubsTitle}>Saved Clubs</h1>
+        <nav role="navigation" aria-label="Club categories">
+          {categories.map((category) => (
+            <SavedClubCategory
+              key={category.name}
+              name={category.name}
+              icon={category.icon}
+              isActive={selectedCategory === category.name}
+              onSelect={() => setSelectedCategory(category.name)}
+            />
+          ))}
+        </nav>
+        <SearchBar
+          onSearch={setSearchQuery}
+          placeholder="Search saved clubs..."
+        />
+      </aside>
+      <ClubList selectedCategory={selectedCategory} searchQuery={searchQuery} />
+    </main>
+  );
+};
+</document_content>
+</document>
+<document index="21">
+<source>build-a-bag/src/app/clubBuilder/CompareButton.tsx</source>
+<document_content>
+import React from "react";
+import styles from "./ClubBuilder.module.css";
+import { CompareButtonProps } from "./types";
+
+export const CompareButton: React.FC<CompareButtonProps> = ({
+  onClick,
+  text,
+  isComparing = false,
+}) => (
+  <button
+    className={`${styles.compareButton} ${isComparing ? styles.comparing : ""}`}
+    onClick={onClick}
+    aria-pressed={isComparing}
+  >
+    <span className={styles.compareText}>{text}</span>
+    <span className={styles.compareIcon} aria-hidden="true">
+      <img src="/icons/compare.svg" alt="" />
+    </span>
+  </button>
+);
+</document_content>
+</document>
+<document index="22">
+<source>build-a-bag/src/app/clubBuilder/ClubBuilder.module.css</source>
+<document_content>
+.builder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background-color: #dadada;
+  border-radius: 0 35px 0 0;
+}
+
+.savedClubs {
+  width: 275px;
+  min-width: 240px;
+  background-color: #2c2c2c;
+  display: flex;
+  flex-direction: column;
+}
+
+.savedClubsTitle {
+  padding: 23px 20px;
+  color: #2c2c2c;
+  font: 700 19px/1 Inter, sans-serif;
+  background-color: #bec8e1;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 23px 20px;
+  color: #bec8e1;
+  font: 700 15px/1 Inter, sans-serif;
+  border: 1px solid #e7e7e7;
+  width: 100%;
+  background: none;
+  cursor: pointer;
+}
+
+.categoryItem:hover,
+.categoryItem:focus {
+  background-color: #3c3c3c;
+}
+
+.categoryItem.active {
+  background-color: #3c3c3c;
+}
+
+.categoryIcon {
+  width: 8px;
+  height: 16px;
+}
+
+.searchContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 255px;
+  padding: 9px 10px;
+  background-color: #bec8e1;
+  border-radius: 0 25px 25px 0;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 20px;
+  background-color: #e7e7e7;
+  border: none;
+  font: 400 13px/1 Inter, sans-serif;
+  color: #2c2c2c;
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.listBuilder {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  min-width: 240px;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #bec8e1;
+  border-radius: 0 25px 0 0;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.myBag {
+  font: 700 18px/1 Inter, sans-serif;
+  color: #2c2c2c;
+}
+
+.updated {
+  font: 400 12px/1 Inter, sans-serif;
+  color: rgba(44, 44, 44, 0.8);
+}
+
+.clubList {
+  flex: 1;
+  background-color: #e7e7e7;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.clubCard {
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  padding: 15px;
+}
+
+.clubType {
+  font: 700 15px/1 Inter, sans-serif;
+  color: #2c2c2c;
+  margin-bottom: 10px;
+}
+
+.clubDetails {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.clubName,
+.clubCompany,
+.clubPrice {
+  font: 700 13px/1 Inter, sans-serif;
+  color: #2c2c2c;
+}
+
+.clubLink {
+  color: #5b9dd0;
+  text-decoration: none;
+  border-bottom: 1px solid #5f86be;
+}
+
+.compareButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 15px;
+  background-color: #bec8e1;
+  border-radius: 37px;
+  border: none;
+  cursor: pointer;
+  font: 400 13px/1 Inter, sans-serif;
+}
+
+.compareButton:hover,
+.compareButton:focus {
+  background-color: #a9b6d4;
+}
+
+.compareIcon {
+  width: 15px;
+  height: 15px;
+}
+
+.specInfo {
+  background-color: #bec8e1;
+  border-radius: 0 0 37px 37px;
+  padding: 15px;
+  margin-top: 10px;
+}
+
+.specList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.specification {
+  display: flex;
+  justify-content: space-between;
+  font: 400 12px/1 Inter, sans-serif;
+  color: #2c2c2c;
+  padding: 5px 0;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.manufacturerInfo,
+.sellerInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logoImage {
+  width: 80px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.addClubButton {
+  width: 111px;
+  height: 35px;
+  margin: 20px auto;
+  background-color: #bec8e1;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plusIcon {
+  font-size: 24px;
+  color: #2c2c2c;
+}
+
+@media (max-width: 991px) {
+  .builder,
+  .listBuilder,
+  .clubList,
+  .clubCard,
+  .clubDetails {
+    max-width: 100%;
+  }
+
+  .heading {
+    padding-right: 20px;
+  }
+
+  .clubDetails {
+    flex-wrap: wrap;
+  }
+}
+</document_content>
+</document>
+<document index="23">
+<source>build-a-bag/src/app/clubBuilder/types.ts</source>
+<document_content>
+export interface ClubProps {
+  type: string;
+  name: string;
+  company: string;
+  link: string;
+  price: string;
+  specs?: {
+    model: string;
+    dexterity: string;
+    shaft: string;
+    condition: string;
+    releaseDate: string;
+    manufacturer: string;
+    seller: string;
+  };
+}
+
+export interface SavedClubCategoryProps {
+  name: string;
+  icon: string;
+  isActive?: boolean;
+  onSelect: () => void;
+}
+
+export interface CompareButtonProps {
+  onClick: () => void;
+  text: string;
+  isComparing?: boolean;
+}
+
+export interface SearchBarProps {
+  onSearch: (query: string) => void;
+  placeholder?: string;
+}
+
+export interface SpecificationProps {
+  label: string;
+  value: string;
+}
+
+export interface ClubSpecificationsProps {
+  specs: ClubProps["specs"];
+  isExpanded: boolean;
+}
+</document_content>
+</document>
+<document index="24">
+<source>build-a-bag/src/app/clubBuilder/SearchBar.tsx</source>
+<document_content>
+import React, { useState, useCallback } from "react";
+import styles from "./ClubBuilder.module.css";
+import { SearchBarProps } from "./types";
+
+export const SearchBar: React.FC<SearchBarProps> = ({
+  onSearch,
+  placeholder = "Search...",
+}) => {
+  const [value, setValue] = useState("");
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+      setValue(newValue);
+      onSearch(newValue);
+    },
+    [onSearch]
+  );
+
+  return (
+    <div className={styles.searchContainer}>
+      <input
+        type="search"
+        className={styles.searchInput}
+        value={value}
+        onChange={handleChange}
+        placeholder={placeholder}
+        aria-label="Search saved clubs"
+      />
+      <span className={styles.searchIcon} aria-hidden="true">
+        <img src="/icons/search.svg" alt="" />
+      </span>
+    </div>
+  );
+};
+</document_content>
+</document>
+<document index="25">
+<source>build-a-bag/src/app/clubBuilder/ClubList.tsx</source>
+<document_content>
+import React from "react";
+import styles from "./ClubBuilder.module.css";
+import { ClubCard } from "./ClubCard";
+import { ClubProps } from "./types";
+
+interface ClubListProps {
+  selectedCategory: string;
+  searchQuery: string;
+}
+
+export const ClubList: React.FC<ClubListProps> = ({
+  selectedCategory,
+  searchQuery,
+}) => {
+  const [lastUpdated] = React.useState(new Date().toLocaleString());
+
+  const clubs: ClubProps[] = [
+    {
+      type: "Driver",
+      name: "SuperDriverX",
+      company: "GolfCompany",
+      link: "golfcompany.com",
+      price: "$XXX.XX",
+      specs: {
+        model: "SuperDriverX123",
+        dexterity: "Right Handed",
+        shaft: '49.5" Steel Stiff',
+        condition: "Refurbished",
+        releaseDate: "2023",
+        manufacturer: "GolfCo",
+        seller: "GolfPlaceXYZ",
+      },
+    },
+  ];
+
+  return (
+    <section className={styles.listBuilder} aria-label="Club List">
+      <header className={styles.heading}>
+        <h2 className={styles.myBag}>MyBag</h2>
+        <time className={styles.updated} dateTime={lastUpdated}>
+          Last Updated {lastUpdated}
+        </time>
+      </header>
+      <div className={styles.clubList} role="list">
+        {clubs.map((club, index) => (
+          <ClubCard key={`${club.name}-${index}`} {...club} />
+        ))}
+      </div>
+      <button
+        className={styles.addClubButton}
+        aria-label="Add new club"
+        onClick={() => {}}
+      >
+        <span className={styles.plusIcon} aria-hidden="true">
+          +
+        </span>
+      </button>
+    </section>
+  );
+};
+</document_content>
+</document>
+<document index="26">
+<source>build-a-bag/src/app/clubBuilder/ClubCard.tsx</source>
+<document_content>
+import React, { useState } from "react";
+import styles from "./ClubBuilder.module.css";
+import { CompareButton } from "./CompareButton";
+import { ClubSpecifications } from "./ClubSpecifications";
+import { ClubProps } from "./types";
+
+export const ClubCard: React.FC<ClubProps> = ({
+  type,
+  name,
+  company,
+  link,
+  price,
+  specs,
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isComparing, setIsComparing] = useState(false);
+
+  const toggleSpecs = () => setIsExpanded(!isExpanded);
+
+  return (
+    <article className={styles.clubCard} role="listitem">
+      <h3 className={styles.clubType}>{type}</h3>
+      <div className={styles.clubInfo}>
+        <div className={styles.clubDetails}>
+          <span className={styles.clubName}>{name}</span>
+          <span className={styles.clubCompany}>{company}</span>
+          <a
+            href={link}
+            className={styles.clubLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {link}
+          </a>
+          <span className={styles.clubPrice}>{price}</span>
+          <CompareButton
+            onClick={() => setIsComparing(!isComparing)}
+            text="Compare"
+            isComparing={isComparing}
+          />
+        </div>
+        <button
+          className={styles.specsArrow}
+          onClick={toggleSpecs}
+          aria-expanded={isExpanded}
+          aria-label={`${
+            isExpanded ? "Hide" : "Show"
+          } specifications for ${name}`}
+        >
+          <span
+            className={`${styles.arrow} ${isExpanded ? styles.expanded : ""}`}
+            aria-hidden="true"
+          />
+        </button>
+      </div>
+      {specs && <ClubSpecifications specs={specs} isExpanded={isExpanded} />}
+    </article>
+  );
+};
+</document_content>
+</document>
+<document index="27">
+<source>build-a-bag/src/app/clubBuilder/page.tsx</source>
+<document_content>
+import React from "react";
+import { ClubBuilder } from "./ClubBuilder";
+
+const ClubBuilderPage: React.FC = () => {
+    return (
+        <div>
+            <ClubBuilder />
+        </div>
+    );
+}</document_content>
+</document>
+<document index="28">
+<source>build-a-bag/src/app/clubBuilder/SavedClubCategory.tsx</source>
+<document_content>
+import React from "react";
+import styles from "./ClubBuilder.module.css";
+import { SavedClubCategoryProps } from "./types";
+
+export const SavedClubCategory: React.FC<SavedClubCategoryProps> = ({
+  name,
+  icon,
+  isActive,
+  onSelect,
+}) => (
+  <button
+    className={`${styles.categoryItem} ${isActive ? styles.active : ""}`}
+    onClick={onSelect}
+    aria-pressed={isActive}
+  >
+    <img src={icon} alt="" className={styles.categoryIcon} aria-hidden="true" />
+    <span className={styles.categoryName}>{name}</span>
+  </button>
+);
+</document_content>
+</document>
+<document index="29">
+<source>build-a-bag/src/app/clubBuilder/ClubSpecifications.tsx</source>
+<document_content>
+import React from "react";
+import styles from "./ClubBuilder.module.css";
+import { ClubSpecificationsProps, SpecificationProps } from "./types";
+
+const Specification: React.FC<SpecificationProps> = ({ label, value }) => (
+  <div className={styles.specification}>
+    <dt>{label}</dt>
+    <dd>{value}</dd>
+  </div>
+);
+
+export const ClubSpecifications: React.FC<ClubSpecificationsProps> = ({
+  specs,
+  isExpanded,
+}) => {
+  if (!isExpanded || !specs) return null;
+
+  return (
+    <div
+      className={styles.specInfo}
+      role="region"
+      aria-label="Club specifications"
+    >
+      <dl className={styles.specList}>
+        <Specification label="Model" value={specs.model} />
+        <Specification label="Dexterity" value={specs.dexterity} />
+        <Specification label="Shaft" value={specs.shaft} />
+        <Specification label="Condition" value={specs.condition} />
+        <Specification label="Release Date" value={specs.releaseDate} />
+        <div className={styles.manufacturerInfo}>
+          <Specification label="Manufacturer" value={specs.manufacturer} />
+          <div className={styles.manufacturerLogo}>
+            <img
+              src="/manufacturer-logo.svg"
+              alt={`${specs.manufacturer} logo`}
+              className={styles.logoImage}
+            />
+          </div>
+        </div>
+        <div className={styles.sellerInfo}>
+          <Specification label="Seller" value={specs.seller} />
+          <div className={styles.sellerLogo}>
+            <img
+              src="/seller-logo.svg"
+              alt={`${specs.seller} logo`}
+              className={styles.logoImage}
+            />
+          </div>
+        </div>
+      </dl>
+    </div>
+  );
+};
+</document_content>
+</document>
+<document index="30">
 <source>build-a-bag/src/app/user-profile/ProfilePage.module.css</source>
 <document_content>
 .desktop {
@@ -1469,7 +3061,7 @@ export async function POST(request: Request) {
 }
 </document_content>
 </document>
-<document index="15">
+<document index="31">
 <source>build-a-bag/src/app/user-profile/AccountNav.tsx</source>
 <document_content>
 import React from "react";
@@ -1478,32 +3070,41 @@ import styles from "./ProfilePage.module.css";
 interface AccountNavigationProps {
   onNavigate: (section: string) => void;
   activeSection: string;
+  disabled?: boolean;
 }
 
-const AccountNavigation: React.FC<AccountNavigationProps> = ({ onNavigate, activeSection }) => {
+const AccountNavigation: React.FC<AccountNavigationProps> = ({ 
+  onNavigate, 
+  activeSection,
+  disabled = false 
+}) => {
   return (
     <nav className={styles.accountNavigation}>
       <button
         className={`${styles.navItem} ${activeSection === "account" ? styles.activeTab : ""}`}
         onClick={() => onNavigate("account")}
+        disabled={disabled}
       >
         Account
       </button>
       <button
         className={`${styles.navItem} ${activeSection === "profile" ? styles.activeTab : ""}`}
         onClick={() => onNavigate("profile")}
+        disabled={disabled}
       >
         Profile
       </button>
       <button
         className={`${styles.navItem} ${activeSection === "saved-bags" ? styles.activeTab : ""}`}
         onClick={() => onNavigate("saved-bags")}
+        disabled={disabled}
       >
         Saved Bags
       </button>
       <button
         className={`${styles.navItem} ${activeSection === "favorite-clubs" ? styles.activeTab : ""}`}
         onClick={() => onNavigate("favorite-clubs")}
+        disabled={disabled}
       >
         Favorite Clubs
       </button>
@@ -1511,10 +3112,9 @@ const AccountNavigation: React.FC<AccountNavigationProps> = ({ onNavigate, activ
   );
 };
 
-export default AccountNavigation;
-</document_content>
+export default AccountNavigation;</document_content>
 </document>
-<document index="16">
+<document index="32">
 <source>build-a-bag/src/app/user-profile/ProfilePage.tsx</source>
 <document_content>
 "use client";
@@ -1528,6 +3128,7 @@ import ProfileInfo from "./ProfileInfo";
 import AccountNavigation from "./AccountNav";
 import AccountInfo from "./AccountInfo";
 import SavedBagsSection from "./SavedBagsSection";
+import { PageLoading, ProfileSkeleton } from "../components/Loading/Loading";
 
 const ProfilePage: React.FC = () => {
   const { data: session, status } = useSession();
@@ -1535,11 +3136,12 @@ const ProfilePage: React.FC = () => {
   const [phone, setPhone] = useState("+1 (123) 456-7890");
   const [isLoading, setIsLoading] = useState(false);
   const [currentSection, setCurrentSection] = useState("account");
+  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const router = useRouter();
 
-  // Protect the route
+  // Show loading screen while session is loading
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <PageLoading />;
   }
 
   if (!session) {
@@ -1547,12 +3149,14 @@ const ProfilePage: React.FC = () => {
     return null;
   }
 
-  // Logout function
   const handleLogout = async () => {
+    setIsLogoutLoading(true);
     try {
       await signOut({ redirect: true, callbackUrl: '/' });
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      setIsLogoutLoading(false);
     }
   };
 
@@ -1590,14 +3194,19 @@ const ProfilePage: React.FC = () => {
     <main className={styles.desktop}>
       <Nav />
       <section className={styles.profileSection}>
-        <ProfileInfo 
-          name={session.user?.name || "User"}
-          email={session.user?.email || ""}
-          image={session.user?.image}
-        />
+        {isLoading ? (
+          <ProfileSkeleton />
+        ) : (
+          <ProfileInfo 
+            name={session.user?.name || "User"}
+            email={session.user?.email || ""}
+            image={session.user?.image}
+          />
+        )}
         <AccountNavigation
           activeSection={currentSection}
-          onNavigate={(section) => setCurrentSection(section)}
+          onNavigate={setCurrentSection}
+          disabled={isLoading}
         />
         <div className={styles.accountInfoWrapper}>
           {currentSection === "account" && (
@@ -1609,6 +3218,7 @@ const ProfilePage: React.FC = () => {
               updatePassword={updatePassword}
               isLoading={isLoading}
               onLogout={handleLogout}
+              isLogoutLoading={isLogoutLoading}
             />
           )}
           {currentSection === "saved-bags" && <SavedBagsSection />}
@@ -1620,7 +3230,7 @@ const ProfilePage: React.FC = () => {
 
 export default ProfilePage;</document_content>
 </document>
-<document index="17">
+<document index="33">
 <source>build-a-bag/src/app/user-profile/SavedBagsSection.tsx</source>
 <document_content>
 import React, { useState } from "react";
@@ -1703,7 +3313,7 @@ const SavedBagsSection: React.FC = () => {
 export default SavedBagsSection;
 </document_content>
 </document>
-<document index="18">
+<document index="34">
 <source>build-a-bag/src/app/user-profile/page.tsx</source>
 <document_content>
 import React from 'react';
@@ -1722,7 +3332,7 @@ const Home: React.FC = () => {
 
 export default Home;</document_content>
 </document>
-<document index="19">
+<document index="35">
 <source>build-a-bag/src/app/user-profile/ProfileInfo.tsx</source>
 <document_content>
 import React from "react";
@@ -1755,11 +3365,12 @@ const ProfileInfo: React.FC<ProfileInfoProps> = ({ name, email, image }) => {
 
 export default ProfileInfo;</document_content>
 </document>
-<document index="20">
+<document index="36">
 <source>build-a-bag/src/app/user-profile/AccountInfo.tsx</source>
 <document_content>
 import React from "react";
 import styles from "./ProfilePage.module.css";
+import { LoadingButton } from "../components/Loading/Loading";
 
 interface AccountInfoProps {
   email: string;
@@ -1768,7 +3379,8 @@ interface AccountInfoProps {
   updatePhone: (newPhone: string) => Promise<void>;
   updatePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   isLoading: boolean;
-  onLogout: () => void; // Add the logout function as a prop
+  onLogout: () => void;
+  isLogoutLoading: boolean;
 }
 
 const AccountInfo: React.FC<AccountInfoProps> = ({
@@ -1778,7 +3390,8 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
   updatePhone,
   updatePassword,
   isLoading,
-  onLogout, // Destructure the logout function
+  onLogout,
+  isLogoutLoading
 }) => {
   return (
     <section className={styles.accountInfo}>
@@ -1797,8 +3410,12 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
             Preferences
           </a>
         </nav>
-        {/* Logout Button */}
-        <button className={styles.logoutButton} onClick={onLogout}>
+        <LoadingButton
+          className={styles.logoutButton}
+          onClick={onLogout}
+          loading={isLogoutLoading}
+          disabled={isLoading}
+        >
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d635aee04b7da5ebbe603e8b08f6130b9cdd41b0f4a81bf81dade7222c51df1b?placeholderIfAbsent=true&apiKey=9b88e8bde4694705ae2bbf25c8ed8c1f"
@@ -1806,23 +3423,23 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
             className={styles.logoutIcon}
           />
           Logout
-        </button>
+        </LoadingButton>
       </aside>
       <div className={styles.infoContent}>
         <div className={styles.infoSection}>
           <h2 className={styles.infoTitle}>Email</h2>
           <div className={styles.infoRow}>
             <p className={styles.infoValue}>{email}</p>
-            <button
+            <LoadingButton
               className={styles.changeButton}
               onClick={() => {
                 const newEmail = prompt("Enter new email:");
                 if (newEmail) updateEmail(newEmail);
               }}
-              disabled={isLoading}
+              loading={isLoading}
             >
               Change Email
-            </button>
+            </LoadingButton>
           </div>
         </div>
         <hr className={styles.divider} />
@@ -1830,23 +3447,23 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
           <h2 className={styles.infoTitle}>Phone</h2>
           <div className={styles.infoRow}>
             <p className={styles.infoValue}>{phone}</p>
-            <button
+            <LoadingButton
               className={styles.changeButton}
               onClick={() => {
                 const newPhone = prompt("Enter new phone:");
                 if (newPhone) updatePhone(newPhone);
               }}
-              disabled={isLoading}
+              loading={isLoading}
             >
               Change Phone
-            </button>
+            </LoadingButton>
           </div>
         </div>
         <hr className={styles.divider} />
         <div className={styles.infoSection}>
           <h2 className={styles.infoTitle}>Password</h2>
           <div className={styles.infoRow}>
-            <button
+            <LoadingButton
               className={styles.changeButton}
               onClick={() => {
                 const oldPassword = prompt("Enter old password:");
@@ -1854,10 +3471,10 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
                 if (oldPassword && newPassword)
                   updatePassword(oldPassword, newPassword);
               }}
-              disabled={isLoading}
+              loading={isLoading}
             >
               Change Password
-            </button>
+            </LoadingButton>
           </div>
         </div>
       </div>
@@ -1865,10 +3482,9 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
   );
 };
 
-export default AccountInfo;
-</document_content>
+export default AccountInfo;</document_content>
 </document>
-<document index="21">
+<document index="37">
 <source>build-a-bag/src/app/page.tsx</source>
 <document_content>
 import { redirect } from 'next/navigation'
@@ -1877,7 +3493,7 @@ export default function Page() {
   redirect('/home')
 }</document_content>
 </document>
-<document index="22">
+<document index="38">
 <source>build-a-bag/src/app/globals.css</source>
 <document_content>
 @tailwind base;
@@ -1886,6 +3502,12 @@ export default function Page() {
 
 body {
     font-family: "Inter-Bold", sans-serif;
+    scroll-behavior: smooth;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    opacity: 0.8;
 }</document_content>
 </document>
 </documents>

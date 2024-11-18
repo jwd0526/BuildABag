@@ -1,3 +1,5 @@
+"use client";
+
 import Nav from "../components/Nav/Nav";
 import '../../../public/logo.svg';
 import '../../../public/arrow.svg';
@@ -8,6 +10,16 @@ interface LandingPageProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) => {
+  const handleCTA = () => {
+    const exampleSection = document.querySelector('.example-section');
+    if (exampleSection) {
+      exampleSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   return (
     <div className={`landing-page ${className}`} {...props}>
       <Nav />
@@ -24,7 +36,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) =
             </p>
           </div>
         </div>
-        <div className="cta-container">
+        <div className="cta-container clickable" onClick={handleCTA}>
           <button className="cta-button">VIEW BUILDS</button>
           <img className="cta-arrow" src="arrow.svg" alt="Arrow Icon" />
         </div>

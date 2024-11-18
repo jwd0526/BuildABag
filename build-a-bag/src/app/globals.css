@@ -4,4 +4,10 @@
 
 body {
     font-family: "Inter-Bold", sans-serif;
+    scroll-behavior: smooth;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    opacity: 0.8;
 }

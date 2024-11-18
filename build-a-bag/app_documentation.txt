@@ -1,0 +1,10 @@
+<documents>
+<document index="1">
+<source>directory-structure.txt</source>
+<document_content>
+build-a-bag/src/app  [error opening dir]
+
+0 directories, 0 files
+</document_content>
+</document>
+</documents>

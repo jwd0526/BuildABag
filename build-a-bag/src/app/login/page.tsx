@@ -3,16 +3,25 @@
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import "./AuthPage.css";
+import { LoadingButton } from "../components/Loading/Loading";
+import AuthLayout from "../components/AuthLayout/AuthLayout";
+import styles from '../components/AuthLayout/AuthLayout.module.css';
 
 const LoginPage: React.FC = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState({
+    google: false,
+    github: false
+  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError("");
     
     try {
       const result = await signIn("credentials", {
@@ -24,72 +33,93 @@ const LoginPage: React.FC = () => {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push("/user-profile"); // Redirect to profile page
-        router.refresh(); // Refresh the page to update the session
+        router.push("/user-profile");
+        router.refresh();
       }
     } catch (error) {
       setError("An error occurred during login");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider: 'google' | 'github') => {
+    setSocialLoading(prev => ({ ...prev, [provider]: true }));
+    try {
+      await signIn(provider, { callbackUrl: "/user-profile" });
+    } catch (error) {
+      setError(`Error signing in with ${provider}`);
+      setSocialLoading(prev => ({ ...prev, [provider]: false }));
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h1 className="auth-title">Log In</h1>
-        <form className="auth-form" onSubmit={handleLogin}>
-          <div className="auth-input-group">
-            <label className="auth-label">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <label className="auth-label">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button className="auth-button" type="submit">
-            Log In
-          </button>
-        </form>
-        
-        <div className="auth-divider">OR</div>
-        
-        <div className="social-login">
-          <button 
-            className="auth-button google-button"
-            onClick={() => signIn("google", { callbackUrl: "/user-profile" })}
-          >
-            Continue with Google
-          </button>
-          <button 
-            className="auth-button github-button"
-            onClick={() => signIn("github", { callbackUrl: "/user-profile" })}
-          >
-            Continue with GitHub
-          </button>
+    <AuthLayout title="Log In">
+      <form className={styles.authForm} onSubmit={handleLogin}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your email"
+            required
+            disabled={isLoading}
+          />
         </div>
-
-        <p className="auth-footer">
-          Don't have an account?{" "}
-          <span className="auth-link" onClick={() => router.push("/signup")}>
-            Sign Up
-          </span>
-        </p>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your password"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        {error && <p className={styles.error}>{error}</p>}
+        <LoadingButton
+          type="submit"
+          className={styles.button}
+          loading={isLoading}
+        >
+          Log In
+        </LoadingButton>
+      </form>
+      
+      <div className={styles.divider}>OR</div>
+      
+      <div className={styles.socialLogin}>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('google')}
+          loading={socialLoading.google}
+        >
+          Continue with Google
+        </LoadingButton>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('github')}
+          loading={socialLoading.github}
+        >
+          Continue with GitHub
+        </LoadingButton>
       </div>
-    </div>
+
+      <p className={styles.footer}>
+        Don't have an account?{" "}
+        <span 
+          className={styles.link}
+          onClick={() => !isLoading && router.push("/signup")}
+          style={{ opacity: isLoading ? 0.5 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
+        >
+          Sign Up
+        </span>
+      </p>
+    </AuthLayout>
   );
 };
 

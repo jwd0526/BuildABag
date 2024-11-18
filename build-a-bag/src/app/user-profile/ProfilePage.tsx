@@ -9,6 +9,7 @@ import ProfileInfo from "./ProfileInfo";
 import AccountNavigation from "./AccountNav";
 import AccountInfo from "./AccountInfo";
 import SavedBagsSection from "./SavedBagsSection";
+import { PageLoading, ProfileSkeleton } from "../components/Loading/Loading";
 
 const ProfilePage: React.FC = () => {
   const { data: session, status } = useSession();
@@ -16,11 +17,12 @@ const ProfilePage: React.FC = () => {
   const [phone, setPhone] = useState("+1 (123) 456-7890");
   const [isLoading, setIsLoading] = useState(false);
   const [currentSection, setCurrentSection] = useState("account");
+  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const router = useRouter();
 
-  // Protect the route
+  // Show loading screen while session is loading
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <PageLoading />;
   }
 
   if (!session) {
@@ -28,12 +30,14 @@ const ProfilePage: React.FC = () => {
     return null;
   }
 
-  // Logout function
   const handleLogout = async () => {
+    setIsLogoutLoading(true);
     try {
       await signOut({ redirect: true, callbackUrl: '/' });
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      setIsLogoutLoading(false);
     }
   };
 
@@ -71,14 +75,19 @@ const ProfilePage: React.FC = () => {
     <main className={styles.desktop}>
       <Nav />
       <section className={styles.profileSection}>
-        <ProfileInfo 
-          name={session.user?.name || "User"}
-          email={session.user?.email || ""}
-          image={session.user?.image}
-        />
+        {isLoading ? (
+          <ProfileSkeleton />
+        ) : (
+          <ProfileInfo 
+            name={session.user?.name || "User"}
+            email={session.user?.email || ""}
+            image={session.user?.image}
+          />
+        )}
         <AccountNavigation
           activeSection={currentSection}
-          onNavigate={(section) => setCurrentSection(section)}
+          onNavigate={setCurrentSection}
+          disabled={isLoading}
         />
         <div className={styles.accountInfoWrapper}>
           {currentSection === "account" && (
@@ -90,6 +99,7 @@ const ProfilePage: React.FC = () => {
               updatePassword={updatePassword}
               isLoading={isLoading}
               onLogout={handleLogout}
+              isLogoutLoading={isLogoutLoading}
             />
           )}
           {currentSection === "saved-bags" && <SavedBagsSection />}

@@ -1,3 +1,4 @@
+// components/Nav/Nav.tsx
 "use client";
 
 import { useRouter } from 'next/navigation';
@@ -23,7 +24,7 @@ const Nav: React.FC = () => {
   const { data: session, status } = useSession();
 
   const handleClubsClick = () => {
-    console.log("Clubs clicked");
+    router.push("/my-bags");  // Updated to route to my-bags
   };
 
   const handleResourcesClick = () => {
@@ -50,11 +51,15 @@ const Nav: React.FC = () => {
     }
   };
 
+  const handleTitleClick = () => {
+    router.push("/home");
+  }
+
   // Always render the Nav, regardless of auth state
   return (
     <div className="header">
       <div className="navigation-pill-list">
-        <div className="title">
+        <div className="title clickable" onClick={handleTitleClick}>
           <div className="logo-box">
             <img className="logo" src="/logo.svg" alt="Logo" />
           </div>
@@ -65,14 +70,12 @@ const Nav: React.FC = () => {
         <NavHeader label="Contact" isButton={true} onClick={handleContactClick} />
       </div>
       <div className="header-auth">
-        {/* Auth button changes based on session state */}
         <NavHeader 
           label={session ? "Home" : "Log In"} 
           isButton={true} 
           onClick={handleAuthClick} 
         />
         <div className="profile-button">
-          {/* Profile button changes based on session state */}
           <NavHeader 
             label={session ? (session.user?.name?.[0] || 'U') : "Sign Up"} 
             isButton={true} 

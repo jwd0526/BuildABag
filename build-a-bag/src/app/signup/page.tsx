@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import "./AuthPage.css";
 import { signIn } from "next-auth/react";
+import { LoadingButton } from "../components/Loading/Loading";
+import AuthLayout from "../components/AuthLayout/AuthLayout";
+import styles from '../components/AuthLayout/AuthLayout.module.css';
 
 const SignupPage: React.FC = () => {
   const router = useRouter();
@@ -11,11 +13,15 @@ const SignupPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState({
+    google: false,
+    github: false
+  });
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsLoading(true);
     setError("");
 
     try {
@@ -48,71 +54,105 @@ const SignupPage: React.FC = () => {
       if (result?.error) {
         setError(result.error);
       } else {
-        router.push("/user-profile"); // Redirect to profile page
-        router.refresh(); // Refresh to update session
+        router.push("/user-profile");
+        router.refresh();
       }
     } catch (error) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
+    }
+  };
+
+  const handleSocialLogin = async (provider: 'google' | 'github') => {
+    setSocialLoading(prev => ({ ...prev, [provider]: true }));
+    try {
+      await signIn(provider, { callbackUrl: "/user-profile" });
+    } catch (error) {
+      setError(`Error signing in with ${provider}`);
+      setSocialLoading(prev => ({ ...prev, [provider]: false }));
     }
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-container">
-        <h1 className="auth-title">Sign Up</h1>
-        <form className="auth-form" onSubmit={handleSignup}>
-          <div className="auth-input-group">
-            <label className="auth-label">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your name"
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <label className="auth-label">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-          <div className="auth-input-group">
-            <label className="auth-label">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="auth-input"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button 
-            className="auth-button" 
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? "Creating Account..." : "Sign Up"}
-          </button>
-        </form>
-        <p className="auth-footer">
-          Already have an account?{" "}
-          <span className="auth-link" onClick={() => router.push("/login")}>
-            Log In
-          </span>
-        </p>
+    <AuthLayout title="Sign Up">
+      <form className={styles.authForm} onSubmit={handleSignup}>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Name</label>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your name"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Email</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your email"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <label className={styles.label}>Password</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={styles.input}
+            placeholder="Enter your password"
+            required
+            disabled={isLoading}
+          />
+        </div>
+        {error && <p className={styles.error}>{error}</p>}
+        <LoadingButton 
+          type="submit"
+          className={styles.button}
+          loading={isLoading}
+        >
+          Sign Up
+        </LoadingButton>
+      </form>
+
+      <div className={styles.divider}>OR</div>
+      
+      <div className={styles.socialLogin}>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('google')}
+          loading={socialLoading.google}
+        >
+          Continue with Google
+        </LoadingButton>
+        <LoadingButton 
+          className={styles.button}
+          onClick={() => handleSocialLogin('github')}
+          loading={socialLoading.github}
+        >
+          Continue with GitHub
+        </LoadingButton>
       </div>
-    </div>
+
+      <p className={styles.footer}>
+        Already have an account?{" "}
+        <span 
+          className={styles.link}
+          onClick={() => !isLoading && router.push("/login")}
+          style={{ opacity: isLoading ? 0.5 : 1, cursor: isLoading ? 'not-allowed' : 'pointer' }}
+        >
+          Log In
+        </span>
+      </p>
+    </AuthLayout>
   );
 };
 

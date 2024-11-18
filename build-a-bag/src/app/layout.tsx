@@ -2,6 +2,7 @@
 
 import React, { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
+import './globals.css'
 
 interface RootLayoutProps {
   children: ReactNode;

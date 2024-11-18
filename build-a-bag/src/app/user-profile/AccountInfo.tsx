@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./ProfilePage.module.css";
+import { LoadingButton } from "../components/Loading/Loading";
 
 interface AccountInfoProps {
   email: string;
@@ -8,7 +9,8 @@ interface AccountInfoProps {
   updatePhone: (newPhone: string) => Promise<void>;
   updatePassword: (oldPassword: string, newPassword: string) => Promise<void>;
   isLoading: boolean;
-  onLogout: () => void; // Add the logout function as a prop
+  onLogout: () => void;
+  isLogoutLoading: boolean;
 }
 
 const AccountInfo: React.FC<AccountInfoProps> = ({
@@ -18,7 +20,8 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
   updatePhone,
   updatePassword,
   isLoading,
-  onLogout, // Destructure the logout function
+  onLogout,
+  isLogoutLoading
 }) => {
   return (
     <section className={styles.accountInfo}>
@@ -37,8 +40,12 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
             Preferences
           </a>
         </nav>
-        {/* Logout Button */}
-        <button className={styles.logoutButton} onClick={onLogout}>
+        <LoadingButton
+          className={styles.logoutButton}
+          onClick={onLogout}
+          loading={isLogoutLoading}
+          disabled={isLoading}
+        >
           <img
             loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/d635aee04b7da5ebbe603e8b08f6130b9cdd41b0f4a81bf81dade7222c51df1b?placeholderIfAbsent=true&apiKey=9b88e8bde4694705ae2bbf25c8ed8c1f"
@@ -46,23 +53,23 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
             className={styles.logoutIcon}
           />
           Logout
-        </button>
+        </LoadingButton>
       </aside>
       <div className={styles.infoContent}>
         <div className={styles.infoSection}>
           <h2 className={styles.infoTitle}>Email</h2>
           <div className={styles.infoRow}>
             <p className={styles.infoValue}>{email}</p>
-            <button
+            <LoadingButton
               className={styles.changeButton}
               onClick={() => {
                 const newEmail = prompt("Enter new email:");
                 if (newEmail) updateEmail(newEmail);
               }}
-              disabled={isLoading}
+              loading={isLoading}
             >
               Change Email
-            </button>
+            </LoadingButton>
           </div>
         </div>
         <hr className={styles.divider} />
@@ -70,23 +77,23 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
           <h2 className={styles.infoTitle}>Phone</h2>
           <div className={styles.infoRow}>
             <p className={styles.infoValue}>{phone}</p>
-            <button
+            <LoadingButton
               className={styles.changeButton}
               onClick={() => {
                 const newPhone = prompt("Enter new phone:");
                 if (newPhone) updatePhone(newPhone);
               }}
-              disabled={isLoading}
+              loading={isLoading}
             >
               Change Phone
-            </button>
+            </LoadingButton>
           </div>
         </div>
         <hr className={styles.divider} />
         <div className={styles.infoSection}>
           <h2 className={styles.infoTitle}>Password</h2>
           <div className={styles.infoRow}>
-            <button
+            <LoadingButton
               className={styles.changeButton}
               onClick={() => {
                 const oldPassword = prompt("Enter old password:");
@@ -94,10 +101,10 @@ const AccountInfo: React.FC<AccountInfoProps> = ({
                 if (oldPassword && newPassword)
                   updatePassword(oldPassword, newPassword);
               }}
-              disabled={isLoading}
+              loading={isLoading}
             >
               Change Password
-            </button>
+            </LoadingButton>
           </div>
         </div>
       </div>
