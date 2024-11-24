@@ -32,7 +32,7 @@ const Nav: React.FC = () => {
   };
 
   const handleContactClick = () => {
-    console.log("Contact clicked");
+    router.push("/contact");
   };
 
   const handleAuthClick = () => {
