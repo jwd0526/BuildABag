@@ -73,7 +73,6 @@ const ProfilePage: React.FC = () => {
 
   return (
     <main className={styles.desktop}>
-      <Nav />
       <section className={styles.profileSection}>
         {isLoading ? (
           <ProfileSkeleton />

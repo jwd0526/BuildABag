@@ -70,7 +70,6 @@ const MyBagsPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#e7e7e7]">
         <div className="p-5">
-          <Nav />
         </div>
         <PageLoading />
       </div>
@@ -82,7 +81,6 @@ const MyBagsPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#e7e7e7]">
         <div className="p-5">
-          <Nav />
           <div className="flex flex-col items-center justify-center mt-20">
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
               <strong className="font-bold">Error: </strong>
@@ -104,7 +102,6 @@ const MyBagsPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#e7e7e7]">
       <div className="p-5">
-        <Nav />
         <BuilderDashboard 
           initialBags={bags}
           onBagsUpdate={async (updatedBags) => {

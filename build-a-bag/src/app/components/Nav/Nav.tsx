@@ -66,7 +66,7 @@ const Nav: React.FC = () => {
           <div className="flex items-center justify-center h-8 w-8">
             <img className="h-full w-full" src="/logo.svg" alt="Logo" />
           </div>
-          <div className="ml-2 text-gray-800 font-bold text-lg">BuildABag</div>
+          <div className="ml-2 mr-2 text-gray-800 font-bold text-lg">BuildABag</div>
         </div>
         <NavHeader label="Clubs" isButton={true} onClick={handleClubsClick} />
         <NavHeader label="Resources" isButton={true} onClick={handleResourcesClick} />
@@ -80,7 +80,14 @@ const Nav: React.FC = () => {
         />
         <div className="flex items-center justify-center bg-[#bec8e1] rounded-3xl h-12 px-4">
           <NavHeader
-            label={session ? session.user?.name?.[0] || "U" : "Sign Up"}
+            label={
+              session
+                ? session.user?.name
+                    ?.split(" ") // Split the name into words
+                    .map(word => word[0].toUpperCase()) // Map to the first letter of each word and capitalize it
+                    .join("") || "U" // Join the letters together
+                : "Sign Up"
+            }
             isButton={true}
             onClick={handleProfileClick}
           />
