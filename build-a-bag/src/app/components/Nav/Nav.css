@@ -3,6 +3,8 @@
   align-items: stretch;
   justify-content: space-between;
   width: 100%;
+  background-color: #e7e7e7;
+  padding: 10px;
 }
 
 .navigation-pill-list {

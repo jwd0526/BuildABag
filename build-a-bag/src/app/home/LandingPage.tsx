@@ -22,7 +22,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ className = "", ...props }) =
 
   return (
     <div className={`landing-page ${className}`} {...props}>
-      <Nav />
       <div className="background-overlay">
         <img className="background-logo" src="logo.svg" alt="Background Logo" />
       </div>

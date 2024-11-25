@@ -3,7 +3,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import './Nav.css';
 
 interface NavHeaderProps {
   label: string;
@@ -12,10 +11,12 @@ interface NavHeaderProps {
 }
 
 const NavHeader: React.FC<NavHeaderProps> = ({ label, isButton, onClick }) => (
-  <div className="navigation-pill clickable" style={{zIndex: 2}}>
-    <div className="nav-header" onClick={isButton && onClick ? onClick : undefined}>
-      {label}
-    </div>
+  <div
+    className="flex items-center justify-center cursor-pointer px-4 py-2 0 rounded-full"
+    style={{ zIndex: 2 }}
+    onClick={isButton && onClick ? onClick : undefined}
+  >
+    <div className="text-gray-800 font-bold text-sm">{label}</div>
   </div>
 );
 
@@ -24,7 +25,7 @@ const Nav: React.FC = () => {
   const { data: session, status } = useSession();
 
   const handleClubsClick = () => {
-    router.push("/my-bags");  // Updated to route to my-bags
+    router.push("/my-bags");
   };
 
   const handleResourcesClick = () => {
@@ -53,33 +54,35 @@ const Nav: React.FC = () => {
 
   const handleTitleClick = () => {
     router.push("/home");
-  }
+  };
 
-  // Always render the Nav, regardless of auth state
   return (
-    <div className="header">
-      <div className="navigation-pill-list">
-        <div className="title clickable" onClick={handleTitleClick}>
-          <div className="logo-box">
-            <img className="logo" src="/logo.svg" alt="Logo" />
+    <div className="flex items-stretch justify-between w-full bg-gray-200 p-2">
+      <div className="flex items-center bg-gray-300 rounded-full gap-5 p-2">
+        <div
+          className="flex items-center bg-[#bec8e1] rounded-3xl h-12 p-2 cursor-pointer"
+          onClick={handleTitleClick}
+        >
+          <div className="flex items-center justify-center h-8 w-8">
+            <img className="h-full w-full" src="/logo.svg" alt="Logo" />
           </div>
-          <div className="build-a-bag">BuildABag</div>
+          <div className="ml-2 text-gray-800 font-bold text-lg">BuildABag</div>
         </div>
         <NavHeader label="Clubs" isButton={true} onClick={handleClubsClick} />
         <NavHeader label="Resources" isButton={true} onClick={handleResourcesClick} />
         <NavHeader label="Contact" isButton={true} onClick={handleContactClick} />
       </div>
-      <div className="header-auth">
-        <NavHeader 
-          label={session ? "Home" : "Log In"} 
-          isButton={true} 
-          onClick={handleAuthClick} 
+      <div className="flex items-center bg-gray-300 rounded-full gap-2 h-16 p-2">
+        <NavHeader
+          label={session ? "Home" : "Log In"}
+          isButton={true}
+          onClick={handleAuthClick}
         />
-        <div className="profile-button">
-          <NavHeader 
-            label={session ? (session.user?.name?.[0] || 'U') : "Sign Up"} 
-            isButton={true} 
-            onClick={handleProfileClick} 
+        <div className="flex items-center justify-center bg-[#bec8e1] rounded-3xl h-12 px-4">
+          <NavHeader
+            label={session ? session.user?.name?.[0] || "U" : "Sign Up"}
+            isButton={true}
+            onClick={handleProfileClick}
           />
         </div>
       </div>

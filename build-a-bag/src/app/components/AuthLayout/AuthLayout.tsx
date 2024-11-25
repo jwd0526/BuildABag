@@ -11,7 +11,6 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title }) => {
   return (
     <div className={styles.authPage}>
       <div className={styles.navWrapper}>
-        <Nav />
       </div>
       <div className={styles.contentWrapper}>
         <div className={styles.authContainer}>

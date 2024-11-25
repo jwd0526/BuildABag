@@ -3,10 +3,9 @@ import Nav from "../components/Nav/Nav";
 
 export default function Contact() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#dadada] relative">
-      <Nav />
+    <div className="flex flex-col h-[91vh] bg-[#e7e7e7] relative">
       {/* Background Overlay with Animation */}
-      <div className="absolute inset-0 z-0 flex justify-end items-center animate-swing mr-40">
+      <div className="absolute inset-0 z-0 flex justify-end items-center animate-swing mr-20">
         <img
           className="w-[30vw] object-cover"
           src="logo.svg"
