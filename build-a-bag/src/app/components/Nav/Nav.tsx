@@ -29,7 +29,7 @@ const Nav: React.FC = () => {
   };
 
   const handleResourcesClick = () => {
-    console.log("Resources clicked");
+    router.push("/resources");
   };
 
   const handleContactClick = () => {
