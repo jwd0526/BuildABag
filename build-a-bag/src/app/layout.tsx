@@ -2,6 +2,7 @@
 
 import React, { ReactNode } from "react";
 import { SessionProvider } from "next-auth/react";
+import Nav from "./components/Nav/Nav";
 import './globals.css'
 
 interface RootLayoutProps {
@@ -12,7 +13,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider><Nav />{children}</SessionProvider>
       </body>
     </html>
   );

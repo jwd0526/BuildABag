@@ -5,9 +5,33 @@
 body {
     font-family: "Inter-Bold", sans-serif;
     scroll-behavior: smooth;
+    background-color: #e7e7e7;
 }
 
 .clickable:hover {
     cursor: pointer;
     opacity: 0.8;
 }
+
+@keyframes swing {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(3deg);
+    }
+    50% {
+      transform: rotate(-3deg);
+    }
+    75% {
+      transform: rotate(3deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+  
+  .animate-swing {
+    animation: swing 3s ease-in-out infinite;
+  }
+  
