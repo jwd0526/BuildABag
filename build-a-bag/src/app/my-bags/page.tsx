@@ -101,7 +101,7 @@ const MyBagsPage: React.FC = () => {
   // Show authenticated content
   return (
     <div className="min-h-screen bg-[#e7e7e7]">
-      <div className="p-5">
+      <div className="p-5 z-10">
         <BuilderDashboard 
           initialBags={bags}
           onBagsUpdate={async (updatedBags) => {
@@ -122,6 +122,13 @@ const MyBagsPage: React.FC = () => {
               // Optionally show an error toast/notification
             }
           }}
+        />
+      </div>
+      <div className="absolute inset-0 z-0 flex justify-end items-center rotate-45 mb-[60vh] mr-[20vw]">
+        <img
+          className="w-[30vw] mr-20 opacity-15 z-0"
+          src="logo.svg"
+          alt="Golf Bag Logo"
         />
       </div>
     </div>
