@@ -7,36 +7,44 @@ interface AccountNavigationProps {
   disabled?: boolean;
 }
 
-const AccountNavigation: React.FC<AccountNavigationProps> = ({ 
-  onNavigate, 
+const AccountNavigation: React.FC<AccountNavigationProps> = ({
+  onNavigate,
   activeSection,
-  disabled = false 
+  disabled = false,
 }) => {
   return (
     <nav className={styles.accountNavigation}>
       <button
-        className={`${styles.navItem} ${activeSection === "account" ? styles.activeTab : ""}`}
+        className={`${styles.navItem} ${
+          activeSection === "account" ? styles.activeTab : ""
+        }`}
         onClick={() => onNavigate("account")}
         disabled={disabled}
       >
         Account
       </button>
       <button
-        className={`${styles.navItem} ${activeSection === "profile" ? styles.activeTab : ""}`}
+        className={`${styles.navItem} ${
+          activeSection === "profile" ? styles.activeTab : ""
+        }`}
         onClick={() => onNavigate("profile")}
         disabled={disabled}
       >
         Profile
       </button>
       <button
-        className={`${styles.navItem} ${activeSection === "saved-bags" ? styles.activeTab : ""}`}
+        className={`${styles.navItem} ${
+          activeSection === "saved-bags" ? styles.activeTab : ""
+        }`}
         onClick={() => onNavigate("saved-bags")}
         disabled={disabled}
       >
         Saved Bags
       </button>
       <button
-        className={`${styles.navItem} ${activeSection === "favorite-clubs" ? styles.activeTab : ""}`}
+        className={`${styles.navItem} ${
+          activeSection === "favorite-clubs" ? styles.activeTab : ""
+        }`}
         onClick={() => onNavigate("favorite-clubs")}
         disabled={disabled}
       >

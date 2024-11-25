@@ -164,11 +164,20 @@
   padding: 17px 40px;
   text-decoration: none;
   color: #2c2c2c;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.navItem:first-child {
+.navItem:hover {
+  background-color: #e2e2e2;
+}
+
+.activeTab {
   background-color: #2c2c2c;
   color: #bec8e1;
+  border-radius: 10px;
 }
 
 .accountInfoWrapper {
@@ -365,7 +374,6 @@
   }
 }
 
-
 .savedBagsSection {
   margin-top: 20px;
   padding: 20px;
@@ -433,4 +441,20 @@
 
 .addItemForm button:hover {
   background-color: #a7b8d7;
+}
+
+.deleteButton {
+  background-color: #ff6b6b; 
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #e63946; 
 }

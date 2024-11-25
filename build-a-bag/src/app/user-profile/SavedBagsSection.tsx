@@ -35,6 +35,10 @@ const SavedBagsSection: React.FC = () => {
     }
   };
 
+  const handleDeleteItem = (id: number) => {
+    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  };
+
   return (
     <div className={styles.savedBagsSection}>
       <h2>Saved Bags</h2>
@@ -50,6 +54,7 @@ const SavedBagsSection: React.FC = () => {
               }}
             />
             <p className={styles.itemTitle}>{item.title}</p>
+            <button className={styles.deleteButton} onClick={() => handleDeleteItem(item.id)}>Delete</button>
           </div>
         ))}
       </div>
