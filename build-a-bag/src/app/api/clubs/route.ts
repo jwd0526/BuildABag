@@ -1,4 +1,3 @@
-// app/api/clubs/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -6,10 +5,63 @@ import { authOptions } from "../auth/[...nextauth]/route";
 
 const prisma = new PrismaClient();
 
+export async function GET(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const { searchParams } = new URL(request.url);
+    const bagId = searchParams.get("bagId");
+
+    if (!bagId) {
+      return NextResponse.json(
+        { success: false, error: "Bag ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Verify bag ownership
+    const bag = await prisma.bag.findFirst({
+      where: {
+        id: bagId,
+        userId: session.user.id,
+      },
+    });
+
+    if (!bag) {
+      return NextResponse.json(
+        { success: false, error: "Bag not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
+    // Fetch clubs for the bag
+    const clubs = await prisma.club.findMany({
+      where: { bagId: bagId },
+    });
+
+    return NextResponse.json({ success: true, data: clubs });
+  } catch (error) {
+    console.error("Error fetching clubs:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to fetch clubs" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
@@ -23,8 +75,8 @@ export async function POST(request: Request) {
     const bag = await prisma.bag.findFirst({
       where: {
         id: bagId,
-        userId: session.user.id
-      }
+        userId: session.user.id,
+      },
     });
 
     if (!bag) {
@@ -43,15 +95,11 @@ export async function POST(request: Request) {
         loft: club.loft,
         specification: club.specification,
         imageUrl: club.imageUrl,
-        bagId: bagId
-      }
+        bagId: bagId,
+      },
     });
 
-    return NextResponse.json({ 
-      success: true, 
-      data: newClub 
-    });
-
+    return NextResponse.json({ success: true, data: newClub });
   } catch (error) {
     console.error("Error creating club:", error);
     return NextResponse.json(
@@ -66,7 +114,7 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
@@ -89,8 +137,8 @@ export async function DELETE(request: Request) {
     const bag = await prisma.bag.findFirst({
       where: {
         id: bagId,
-        userId: session.user.id
-      }
+        userId: session.user.id,
+      },
     });
 
     if (!bag) {
@@ -104,70 +152,14 @@ export async function DELETE(request: Request) {
     await prisma.club.delete({
       where: {
         id: clubId,
-      }
+      },
     });
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
     console.error("Error deleting club:", error);
     return NextResponse.json(
       { success: false, error: "Failed to delete club" },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-export async function PUT(request: Request) {
-  try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    const { clubId, bagId, updates } = await request.json();
-
-    // Verify bag ownership
-    const bag = await prisma.bag.findFirst({
-      where: {
-        id: bagId,
-        userId: session.user.id
-      }
-    });
-
-    if (!bag) {
-      return NextResponse.json(
-        { success: false, error: "Bag not found or unauthorized" },
-        { status: 404 }
-      );
-    }
-
-    // Update club
-    const updatedClub = await prisma.club.update({
-      where: {
-        id: clubId,
-      },
-      data: {
-        ...updates,
-        updatedAt: new Date()
-      }
-    });
-
-    return NextResponse.json({ 
-      success: true, 
-      data: updatedClub 
-    });
-
-  } catch (error) {
-    console.error("Error updating club:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to update club" },
       { status: 500 }
     );
   } finally {

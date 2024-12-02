@@ -1,4 +1,3 @@
-// app/api/bags/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -9,7 +8,7 @@ const prisma = new PrismaClient();
 export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
@@ -27,7 +26,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // Use the correct model name based on your Prisma schema
     const bags = await prisma.bag.findMany({
       where: {
         userId: userId,
@@ -52,7 +50,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
@@ -61,11 +59,11 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    
+
     const newBag = await prisma.bag.create({
       data: {
-        name: body.name,
-        description: body.description,
+        name: body.name.trim(),
+        description: body.description || "",
         userId: session.user.id,
         clubs: {
           create: body.clubs || [],
@@ -91,7 +89,7 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
@@ -100,11 +98,10 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    
+
     const updatedBag = await prisma.bag.update({
       where: {
         id: body.id,
-        userId: session.user.id, // Ensure user owns the bag
       },
       data: {
         name: body.name,
@@ -131,7 +128,7 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
@@ -149,11 +146,9 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Delete the bag and all related clubs (cascade delete should handle this)
     await prisma.bag.delete({
       where: {
         id: bagId,
-        userId: session.user.id, // Ensure user owns the bag
       },
     });
 

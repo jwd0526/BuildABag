@@ -1,5 +1,4 @@
-// BuilderDashboard.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './BuilderDashboard.module.css';
 import { ClubBuilder } from '../clubBuilder/ClubBuilder';
 import { LoadingButton } from '../components/Loading/Loading';
@@ -27,105 +26,103 @@ interface BuilderDashboardProps {
   onBagsUpdate: (updatedBags: Bag[]) => Promise<void>;
 }
 
-// Example clubs data based on your uploaded data
-const exampleClubs: Club[] = [
-  {
-    id: '1',
-    name: 'Kawachi Premier Pro',
-    type: 'Wedge',
-    price: '$200',
-    imageUrl: 'https://www.usga.org/equipment/images/conf_clubs/R2010-0717.jpg',
-  },
-  {
-    id: '2',
-    name: 'Kawachi Premiere R2',
-    type: 'Wedge',
-    price: '$220',
-    imageUrl: 'https://www.usga.org/equipment/images/conf_clubs/R2010-0715.jpg',
-  },
-  {
-    id: '3',
-    name: 'Kawachi Sniper XR',
-    type: 'Wedge',
-    price: '$210',
-    imageUrl: 'https://www.usga.org/equipment/images/conf_clubs/R2010-0713.jpg',
-  },
-  {
-    id: '4',
-    name: '1879Orac',
-    type: 'Wedge',
-    price: '$190',
-    imageUrl: 'https://www.usga.org/equipment/images/conf_clubs/R2023-0125.jpg',
-  },
-  {
-    id: '5',
-    name: 'A GRIND AMC',
-    type: 'Wedge',
-    price: '$250',
-    imageUrl: 'https://www.usga.org/equipment/images/conf_clubs/R2023-0271.jpg',
-  },
-  {
-    id: '6',
-    name: 'A Grind BX-W',
-    type: 'Wedge',
-    price: '$240',
-    imageUrl: 'https://www.usga.org/equipment/images/conf_clubs/R2018-0390.jpg',
-  },
-];
-
 const BuilderDashboard: React.FC<BuilderDashboardProps> = ({
   initialBags,
   onBagsUpdate,
 }) => {
   const [bags, setBags] = useState<Bag[]>(initialBags);
   const [selectedBag, setSelectedBag] = useState<Bag | null>(null);
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleCreateBag = () => {
-    const newBag: Bag = {
-      id: Date.now().toString(),
-      name: `My Bag ${bags.length + 1}`,
-      description: '',
-      created: new Date(),
-      lastModified: new Date(),
-      clubs: [],
-    };
-    setBags([...bags, newBag]);
-    setSelectedBag(newBag);
-  };
-
-  const handleAddClubToBag = (club: Club) => {
-    if (!selectedBag) return;
-    const updatedBag = {
-      ...selectedBag,
-      clubs: [...selectedBag.clubs, { ...club, id: `${club.id}-${Date.now()}` }],
-      lastModified: new Date(),
-    };
-    setBags((prevBags) =>
-      prevBags.map((bag) => (bag.id === selectedBag.id ? updatedBag : bag))
-    );
-    setSelectedBag(updatedBag);
-  };
-
-  const handleDeleteClubFromBag = (uniqueClubId: string) => {
-    if (!selectedBag) return;
-    const updatedBag = {
-      ...selectedBag,
-      clubs: selectedBag.clubs.filter((club) => club.id !== uniqueClubId),
-      lastModified: new Date(),
-    };
-    setBags((prevBags) =>
-      prevBags.map((bag) => (bag.id === selectedBag.id ? updatedBag : bag))
-    );
-    setSelectedBag(updatedBag);
-  };
-
-  const handleDeleteBag = (bagId: string) => {
-    const filteredBags = bags.filter((bag) => bag.id !== bagId);
-    setBags(filteredBags);
-    if (selectedBag?.id === bagId) {
-      setSelectedBag(null);
+  // Fetch clubs from the backend
+  const fetchClubs = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/clubs'); // Replace with your API route
+      if (!response.ok) {
+        throw new Error('Failed to fetch clubs');
+      }
+      const data = await response.json();
+      setClubs(
+        data.map((club: any) => ({
+          id: club.id,
+          name: club.model,
+          type: club.type,
+          price: club.loft ? `$${club.loft}` : 'N/A',
+          imageUrl: club.imageUrl,
+        }))
+      );
+    } catch (error) {
+      console.error('Error fetching clubs:', error);
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Add a club to a bag
+  const handleAddClubToBag = async (club: Club) => {
+    if (!selectedBag) return;
+    try {
+      const response = await fetch('/api/clubs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bagId: selectedBag.id,
+          club: club,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add club to the bag');
+      }
+      const updatedClub = await response.json();
+      const updatedBag = {
+        ...selectedBag,
+        clubs: [...selectedBag.clubs, updatedClub.data],
+        lastModified: new Date(),
+      };
+      setBags((prevBags) =>
+        prevBags.map((bag) => (bag.id === selectedBag.id ? updatedBag : bag))
+      );
+      setSelectedBag(updatedBag);
+    } catch (error) {
+      console.error('Error adding club to bag:', error);
+    }
+  };
+
+  // Delete a club from a bag
+  const handleDeleteClubFromBag = async (clubId: string) => {
+    if (!selectedBag) return;
+    try {
+      const response = await fetch(
+        `/api/clubs?clubId=${clubId}&bagId=${selectedBag.id}`,
+        {
+          method: 'DELETE',
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Failed to delete club from the bag');
+      }
+      const updatedBag = {
+        ...selectedBag,
+        clubs: selectedBag.clubs.filter((club) => club.id !== clubId),
+        lastModified: new Date(),
+      };
+      setBags((prevBags) =>
+        prevBags.map((bag) => (bag.id === selectedBag.id ? updatedBag : bag))
+      );
+      setSelectedBag(updatedBag);
+    } catch (error) {
+      console.error('Error deleting club from bag:', error);
+    }
+  };
+
+  // Fetch clubs on component mount
+  useEffect(() => {
+    fetchClubs();
+  }, []);
 
   return (
     <div className={styles.dashboard}>
@@ -133,7 +130,7 @@ const BuilderDashboard: React.FC<BuilderDashboardProps> = ({
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <h2 className={styles.sidebarTitle}>My Bags</h2>
-          <button onClick={handleCreateBag} className={styles.createButton}>
+          <button onClick={() => setBags([...bags, createNewBag()])} className={styles.createButton}>
             Create New Bag
           </button>
         </div>
@@ -220,24 +217,28 @@ const BuilderDashboard: React.FC<BuilderDashboardProps> = ({
             {/* Add Clubs */}
             <div>
               <h2 className={styles.clubListTitle}>Add Clubs:</h2>
-              <ul className={styles.clubList}>
-                {exampleClubs.map((club) => (
-                  <li key={club.id} className={styles.clubItem}>
-                    <img
-                      src={club.imageUrl}
-                      alt={club.name}
-                      className={styles.clubImage}
-                    />
-                    {club.name} ({club.type}) - {club.price}{' '}
-                    <button
-                      onClick={() => handleAddClubToBag(club)}
-                      className={styles.addButton}
-                    >
-                      Add to Bag
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              {loading ? (
+                <p>Loading clubs...</p>
+              ) : (
+                <ul className={styles.clubList}>
+                  {clubs.map((club) => (
+                    <li key={club.id} className={styles.clubItem}>
+                      <img
+                        src={club.imageUrl}
+                        alt={club.name}
+                        className={styles.clubImage}
+                      />
+                      {club.name} ({club.type}) - {club.price}{' '}
+                      <button
+                        onClick={() => handleAddClubToBag(club)}
+                        className={styles.addButton}
+                      >
+                        Add to Bag
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         ) : (
@@ -249,5 +250,15 @@ const BuilderDashboard: React.FC<BuilderDashboardProps> = ({
     </div>
   );
 };
+
+// Helper function to create a new bag
+const createNewBag = (): Bag => ({
+  id: Date.now().toString(),
+  name: `My Bag ${Date.now()}`,
+  description: '',
+  created: new Date(),
+  lastModified: new Date(),
+  clubs: [],
+});
 
 export default BuilderDashboard;
