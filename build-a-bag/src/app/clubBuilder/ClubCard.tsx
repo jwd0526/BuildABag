@@ -4,16 +4,22 @@ import { CompareButton } from "./CompareButton";
 import { ClubSpecifications } from "./ClubSpecifications";
 import { ClubProps } from "./types";
 
-export const ClubCard: React.FC<ClubProps> = ({
+interface ExtendedClubProps extends ClubProps {
+  onCompare: () => void;
+  isComparing: boolean;
+}
+
+export const ClubCard: React.FC<ExtendedClubProps> = ({
   type,
   name,
   company,
   link,
   price,
   specs,
+  onCompare,
+  isComparing
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isComparing, setIsComparing] = useState(false);
 
   const toggleSpecs = () => setIsExpanded(!isExpanded);
 
@@ -34,8 +40,8 @@ export const ClubCard: React.FC<ClubProps> = ({
           </a>
           <span className={styles.clubPrice}>{price}</span>
           <CompareButton
-            onClick={() => setIsComparing(!isComparing)}
-            text="Compare"
+            onClick={onCompare}
+            text={isComparing ? "Remove" : "Compare"}
             isComparing={isComparing}
           />
         </div>
