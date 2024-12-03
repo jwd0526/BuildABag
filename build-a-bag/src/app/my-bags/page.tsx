@@ -1,23 +1,21 @@
-// page.tsx
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import BuilderDashboard from './BuilderDashboard';
-import Nav from '../components/Nav/Nav';
-import { PageLoading, ProfileSkeleton } from '../components/Loading/Loading';
-import { PrismaClient } from '@prisma/client';
+import { PageLoading } from '../components/Loading/Loading';
 
 // Types
-interface Bag {
-  id: string;
+export interface Bag {
+  _id: string;  // MongoDB uses _id by default
+  id: string;   // Prisma maps this to _id
   name: string;
-  description: string;
+  description: string | null;
   userId: string;
   created: Date;
   lastModified: Date;
-  clubs: any[]; // Replace with proper club type
+  clubs: any[]; // Replace with proper club type if needed
 }
 
 interface ApiResponse {
@@ -34,21 +32,21 @@ const MyBagsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Redirect to login if not authenticated
     if (status === 'unauthenticated') {
       router.push('/login');
       return;
     }
 
-    // Fetch bags if authenticated
     if (status === 'authenticated' && session?.user?.id) {
       fetchUserBags();
     }
   }, [status, session?.user?.id]);
 
   const fetchUserBags = async () => {
+    if (!session?.user?.id) return;
+    
     try {
-      const response = await fetch(`/api/bags?userId=${session?.user?.id}`);
+      const response = await fetch(`/api/bags?userId=${session.user.id}`);
       const result: ApiResponse = await response.json();
 
       if (!response.ok) {
@@ -65,18 +63,36 @@ const MyBagsPage: React.FC = () => {
     }
   };
 
-  // Show loading state while session is loading
+  const handleBagsUpdate = async (updatedBags: Bag[]) => {
+    if (!session?.user?.id) return;
+
+    try {
+      const response = await fetch('/api/bags', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: session.user.id,
+          bags: updatedBags,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update bags');
+      }
+
+      setBags(updatedBags);
+    } catch (err) {
+      console.error('Failed to sync bags:', err);
+      setError('Failed to update bags. Please try again.');
+    }
+  };
+
   if (status === 'loading' || isLoading) {
-    return (
-      <div className="min-h-screen bg-[#e7e7e7]">
-        <div className="p-5">
-        </div>
-        <PageLoading />
-      </div>
-    );
+    return <PageLoading />;
   }
 
-  // Show error state
   if (error) {
     return (
       <div className="min-h-screen bg-[#e7e7e7]">
@@ -98,30 +114,17 @@ const MyBagsPage: React.FC = () => {
     );
   }
 
-  // Show authenticated content
+  if (!session?.user?.id) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-[#e7e7e7]">
       <div className="p-5">
         <BuilderDashboard 
           initialBags={bags}
-          onBagsUpdate={async (updatedBags) => {
-            // Here you would typically sync with the backend
-            try {
-              await fetch('/api/bags/sync', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  userId: session?.user?.id,
-                  bags: updatedBags,
-                }),
-              });
-            } catch (err) {
-              console.error('Failed to sync bags:', err);
-              // Optionally show an error toast/notification
-            }
-          }}
+          onBagsUpdate={handleBagsUpdate}
+          userId={session.user.id}
         />
       </div>
     </div>

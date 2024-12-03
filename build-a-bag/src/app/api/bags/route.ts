@@ -1,4 +1,3 @@
-// app/api/bags/route.ts
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
@@ -27,7 +26,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // Use the correct model name based on your Prisma schema
     const bags = await prisma.bag.findMany({
       where: {
         userId: userId,
@@ -35,6 +33,9 @@ export async function GET(request: Request) {
       include: {
         clubs: true,
       },
+      orderBy: {
+        lastModified: 'desc'
+      }
     });
 
     return NextResponse.json({ success: true, data: bags });
@@ -49,44 +50,6 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    const body = await request.json();
-    
-    const newBag = await prisma.bag.create({
-      data: {
-        name: body.name,
-        description: body.description,
-        userId: session.user.id,
-        clubs: {
-          create: body.clubs || [],
-        },
-      },
-      include: {
-        clubs: true,
-      },
-    });
-
-    return NextResponse.json({ success: true, data: newBag });
-  } catch (error) {
-    console.error("Error creating bag:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to create bag" },
-      { status: 500 }
-    );
-  } finally {
-    await prisma.$disconnect();
-  }
-}
 
 export async function PUT(request: Request) {
   try {
@@ -101,10 +64,32 @@ export async function PUT(request: Request) {
 
     const body = await request.json();
     
+    if (!body.bagId) {
+      return NextResponse.json(
+        { success: false, error: "Bag ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Verify bag ownership
+    const existingBag = await prisma.bag.findUnique({
+      where: {
+        id: body.bagId,
+        userId: session.user.id,
+      },
+    });
+
+    if (!existingBag) {
+      return NextResponse.json(
+        { success: false, error: "Bag not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
+    // Update the bag
     const updatedBag = await prisma.bag.update({
       where: {
-        id: body.id,
-        userId: session.user.id, // Ensure user owns the bag
+        id: body.bagId,
       },
       data: {
         name: body.name,
@@ -128,6 +113,41 @@ export async function PUT(request: Request) {
   }
 }
 
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const body = await request.json();
+    
+    const newBag = await prisma.bag.create({
+      data: {
+        name: body.name,
+        description: body.description || "",
+        userId: session.user.id,
+      },
+      include: {
+        clubs: true,
+      },
+    });
+
+    return NextResponse.json({ success: true, data: newBag });
+  } catch (error) {
+    console.error("Error creating bag:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to create bag" },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
+}
 export async function DELETE(request: Request) {
   try {
     const session = await getServerSession(authOptions);
@@ -149,11 +169,25 @@ export async function DELETE(request: Request) {
       );
     }
 
+    // First verify the user owns the bag
+    const bag = await prisma.bag.findFirst({
+      where: {
+        id: bagId,
+        userId: session.user.id
+      }
+    });
+
+    if (!bag) {
+      return NextResponse.json(
+        { success: false, error: "Bag not found or unauthorized" },
+        { status: 404 }
+      );
+    }
+
     // Delete the bag and all related clubs (cascade delete should handle this)
     await prisma.bag.delete({
       where: {
         id: bagId,
-        userId: session.user.id, // Ensure user owns the bag
       },
     });
 

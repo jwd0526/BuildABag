@@ -169,3 +169,40 @@
         padding: 10px;
     }
 }
+
+/* Add these new styles to BuilderDashboard.module.css */
+
+.nameEditForm {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nameInput {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c2c2c;
+    background: transparent;
+    border: 1px solid #2c2c2c;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .clickable {
+    cursor: pointer;
+  }
+  
+  .clickable:hover {
+    opacity: 0.8;
+  }
+  
+  .builderTitle {
+    padding: 4px 8px;
+    border: 1px solid transparent;
+  }
+  
+  .builderTitle:hover {
+    border: 1px dashed #2c2c2c;
+    border-radius: 4px;
+  }
